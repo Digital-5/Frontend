@@ -1,11 +1,63 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import {
+  useFonts,
+  Roboto_100Thin,
+  Roboto_100Thin_Italic,
+  Roboto_300Light,
+  Roboto_300Light_Italic,
+  Roboto_400Regular,
+  Roboto_400Regular_Italic,
+  Roboto_500Medium,
+  Roboto_500Medium_Italic,
+  Roboto_700Bold,
+  Roboto_700Bold_Italic,
+  Roboto_900Black,
+  Roboto_900Black_Italic,
+} from '@expo-google-fonts/roboto';
 import Colors from './theme/colors';
+import Fonts from './theme/fonts';
+
+// Verhindert, dass der Splash Screen automatisch verschwindet
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // Laden der Roboto Schriftarten
+  const [fontsLoaded] = useFonts({
+    Roboto_100Thin,
+    Roboto_100Thin_Italic,
+    Roboto_300Light,
+    Roboto_300Light_Italic,
+    Roboto_400Regular,
+    Roboto_400Regular_Italic,
+    Roboto_500Medium,
+    Roboto_500Medium_Italic,
+    Roboto_700Bold,
+    Roboto_700Bold_Italic,
+    Roboto_900Black,
+    Roboto_900Black_Italic,
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      onLayoutRootView();
+    }
+  }, [fontsLoaded, onLayoutRootView]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   const handleLogin = () => {
     // Handle login logic here
@@ -28,7 +80,7 @@ export default function App() {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
-          placeholderTextColor="#999"
+          placeholderTextColor={Colors.textPlaceholder}
         />
         
         <TextInput
@@ -37,7 +89,7 @@ export default function App() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          placeholderTextColor="#999"
+          placeholderTextColor={Colors.textPlaceholder}
         />
         
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
@@ -67,7 +119,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontFamily: Fonts.bold,
     marginBottom: 40,
     textAlign: 'center',
     color: Colors.textHeadline,
@@ -79,6 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 15,
     fontSize: 16,
+    fontFamily: Fonts.regular,
     borderWidth: 1,
     borderColor: Colors.border,
   },
@@ -93,7 +146,7 @@ const styles = StyleSheet.create({
     color: Colors.buttonText,
     textAlign: 'center',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: Fonts.medium,
   },
   forgotPassword: {
     alignItems: 'center',
@@ -101,5 +154,6 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     color: Colors.link,
     fontSize: 14,
+    fontFamily: Fonts.regular,
   },
 });
