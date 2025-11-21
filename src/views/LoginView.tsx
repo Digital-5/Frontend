@@ -3,13 +3,8 @@ import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableO
 import Colors from '../theme/colors';
 import Fonts from '../theme/fonts';
 
-type Credentials = {
-  email: string;
-  password: string;
-};
-
 type LoginViewProps = {
-  onSubmit?: (credentials: Credentials) => void;
+  onSubmit?: (_credentials: { email: string; password: string }) => void;
 };
 
 export default function LoginView({ onSubmit }: LoginViewProps) {
@@ -17,9 +12,8 @@ export default function LoginView({ onSubmit }: LoginViewProps) {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    const credentials = { email, password };
-    console.log('Login attempt with:', credentials);
-    onSubmit?.(credentials);
+    console.log('Login attempt with:', { email, password });
+    onSubmit?.({ email, password });
   };
 
   return (
