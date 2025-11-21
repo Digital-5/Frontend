@@ -1,24 +1,29 @@
-﻿import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { useState } from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Colors from '../theme/colors';
 import Fonts from '../theme/fonts';
 
-export default function LoginScreen() {
+type LoginViewProps = {
+  onSubmit?: (_credentials: { email: string; password: string }) => void;
+};
+
+export default function LoginView({ onSubmit }: LoginViewProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     console.log('Login attempt with:', { email, password });
+    onSubmit?.({ email, password });
   };
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.formContainer}>
         <Text style={styles.title}>Login</Text>
-        
+
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -28,7 +33,7 @@ export default function LoginScreen() {
           keyboardType="email-address"
           placeholderTextColor={Colors.textPlaceholder}
         />
-        
+
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -37,11 +42,11 @@ export default function LoginScreen() {
           secureTextEntry
           placeholderTextColor={Colors.textPlaceholder}
         />
-        
+
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity style={styles.forgotPassword}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
