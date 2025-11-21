@@ -1,51 +1,327 @@
 # Developer Guide
 
-This project is an Expo/React Native app that also runs on the web via React Native Web. The goal of this guide is to help the team add new UI screens without friction while keeping app logic separated from presentation.
+> **📖 Schnellstart:** Siehe [README.md](README.md) für Installation und Basics!
 
-## Quick start
-- Install dependencies: `npm install`
-- Start the web dev server: `npm run web` (or `npm start` and choose web)
-- Lint/typecheck before pushing: `npm run lint` and `npm run typecheck`
-- Run tests when you add logic-heavy code: `npm test`
+Dieser Guide ergänzt die README mit tiefergehenden Entwicklungs-Patterns und Architektur-Entscheidungen.
 
-## Project layout
-- `index.ts` — registers the Expo root component.
-- `App.tsx` — loads fonts, controls splash screen visibility, renders the active view.
-- `src/views/` — UI screens/pages (e.g., `LoginView`). Each file exports a React component for a single screen. Add an entry to `src/views/index.ts` when you add a new one.
-- `src/theme/` — shared design tokens (`colors.ts`, `fonts.ts`). Always pull styling values from here instead of hardcoding them.
-- `assets/` — icons, splash, and other static assets.
+---
 
-## Adding a new view
-1) Create a file in `src/views/` (e.g., `SignupView.tsx`) and export a component. Keep it focused on layout and local UI state (form fields, toggles, etc.).  
-2) Accept callbacks via props for actions that belong to business logic (submitting a form, navigating elsewhere). This keeps the view reusable.  
-3) Style with the design tokens from `src/theme/` and use `StyleSheet.create` for consistency.  
-4) If the view needs keyboard-safe layout, wrap content with `KeyboardAvoidingView` like the login view.  
-5) Export it from `src/views/index.ts` so it is easy to import elsewhere.  
-6) Wire it into `App.tsx` (or your navigation layer if added later). For now, `App.tsx` directly renders the current view.
+## 🏗️ Architektur-Prinzipien
 
-## UI conventions
-- **Naming:** suffix screen components with `View` and keep file names in PascalCase.
-- **Spacing/layout:** prefer flexbox over absolute positioning; keep consistent padding (e.g., 16–24) and corner radii that match existing components.
-- **Color/fonts:** import from `src/theme/colors` and `src/theme/fonts`. Avoid inline hex codes or font names.
-- **Inputs:** use controlled `TextInput` fields, set `placeholderTextColor` from the theme, and choose the right keyboard type (`email-address`, `numeric`, etc.).
-- **Status bar:** `App.tsx` controls the status bar; individual views should not manage it.
-- **Accessibility:** set `accessibilityLabel`/`accessibilityRole` on touchable elements when you add interactive UI.
+### View-Komponenten (Presentational Components)
 
-## Working with fonts
-- `App.tsx` loads the Roboto family via `useFonts`. Wait for `fontsLoaded` before rendering views.
-- When adding a new font weight/style, add its import in `App.tsx` and a matching entry in `src/theme/fonts.ts`.
+**Ziel:** Views sind reine UI-Komponenten ohne Business Logic.
 
-## When to move logic out of a view
-- Networking, storage, or authentication calls should live outside the view. Pass callbacks into the view that invoke those behaviors.
-- Derived state that can be computed from props should be computed upstream and passed down to keep the view simple.
+```typescript
+// ✅ GOOD: View nimmt Daten via Props, gibt Actions via Callbacks zurück
+type LoginViewProps = {
+  onSubmit?: (_credentials: { email: string; password: string }) => void;
+  errorMessage?: string;
+  isLoading?: boolean;
+};
 
-## Debugging tips
-- If the bundle fails on type syntax in dependencies, ensure `babel.config.js` still uses `babel-preset-expo`.
-- For visual issues, temporarily add a colored border via the theme palette to see layout boxes, then remove it.
-- Use `console.log` sparingly; remove noisy logs once you understand the issue.
+export default function LoginView({ onSubmit, errorMessage, isLoading }: LoginViewProps) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  const handleLogin = () => {
+    onSubmit?.({ email, password });
+  };
+  
+  return (/* UI */)
+}
+```
 
-## Definition of done for UI changes
-- New screens live in `src/views/` with consistent styling and naming.
-- Imports are relative to `src/views`/`src/theme` (no duplicate theme definitions).
-- `npm run lint` and `npm run typecheck` complete without errors.
-- Screens render correctly on both web and native targets in development mode.
+```typescript
+// ❌ BAD: View macht direkt API Calls
+export default function LoginView() {
+  const handleLogin = async () => {
+    const response = await fetch('/api/login', { /* ... */ }); // ❌ Nicht hier!
+  };
+}
+```
+
+### Separation of Concerns
+
+| Layer | Verantwortung | Beispiel |
+|-------|--------------|----------|
+| **Views** | UI Rendering, lokaler State (Form Inputs) | `LoginView.tsx` |
+| **Business Logic** | API Calls, Daten-Transformation, Routing | *Noch nicht implementiert* |
+| **Theme** | Design Tokens (Colors, Fonts, Spacing) | `src/theme/colors.ts` |
+
+---
+
+## 🎨 Design System Guidelines
+
+### Farb-Nutzung
+
+```typescript
+// Primäre Farben
+Colors.primary          // Haupt-Akzentfarbe (Buttons, Links)
+Colors.background       // Screen Hintergrund
+Colors.textHeadline     // Überschriften
+Colors.textOnLight      // Text auf hellem Hintergrund
+Colors.textOnDark       // Text auf dunklem Hintergrund
+
+// UI Elemente
+Colors.button           // Button Hintergrund
+Colors.buttonText       // Button Text
+Colors.inputBackground  // Input Felder
+Colors.border           // Rahmen
+Colors.link             // Hyperlinks
+Colors.textPlaceholder  // Placeholder Text
+```
+
+### Spacing System
+
+```typescript
+// Empfohlene Abstände (nutze diese für Konsistenz)
+const SPACING = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 48,
+};
+
+// Beispiel
+const styles = StyleSheet.create({
+  container: {
+    padding: 24,        // SPACING.lg
+    marginBottom: 16,   // SPACING.md
+  },
+});
+```
+
+### Border Radius
+
+```typescript
+// Standard Border Radius für Konsistenz
+const RADIUS = {
+  small: 4,
+  medium: 8,   // ← Standard für Buttons/Inputs
+  large: 16,
+  full: 9999,  // Für runde Elemente
+};
+```
+
+---
+
+## 📝 Code Conventions
+
+### Naming Conventions
+
+```typescript
+// ✅ Views: PascalCase + "View" Suffix
+LoginView.tsx
+ProfileView.tsx
+SettingsView.tsx
+
+// ✅ Props Types: PascalCase + "Props" Suffix
+type LoginViewProps = { /* ... */ }
+
+// ✅ Callbacks: "on" Prefix
+onSubmit, onPress, onChange, onLogout
+
+// ✅ Boolean Props: "is" oder "has" Prefix
+isLoading, hasError, isVisible
+```
+
+### TypeScript Best Practices
+
+```typescript
+// ✅ Nutze Type statt Interface für Props
+type MyViewProps = {
+  title: string;
+  count?: number;  // Optional mit ?
+};
+
+// ✅ Callback Parameter mit _ prefixen wenn ungenutzt (ESLint)
+type OnSubmit = (_data: FormData) => void;
+
+// ✅ Explicit Return Types für komplexe Funktionen
+function calculateTotal(items: Item[]): number {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+```
+
+---
+
+## 🧩 Komponenten-Patterns
+
+### KeyboardAvoidingView Pattern
+
+Für Formulare auf Mobile:
+
+```typescript
+import { KeyboardAvoidingView, Platform } from 'react-native';
+
+<KeyboardAvoidingView
+  style={styles.container}
+  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+>
+  {/* Form Content */}
+</KeyboardAvoidingView>
+```
+
+### Controlled Input Pattern
+
+```typescript
+const [value, setValue] = useState('');
+
+<TextInput
+  value={value}
+  onChangeText={setValue}
+  placeholder="Enter text"
+  placeholderTextColor={Colors.textPlaceholder}
+  autoCapitalize="none"  // Für Email
+  keyboardType="email-address"  // Passende Tastatur
+/>
+```
+
+### TouchableOpacity vs Button
+
+```typescript
+// ✅ Nutze TouchableOpacity für Custom Styling
+<TouchableOpacity style={styles.button} onPress={handlePress}>
+  <Text style={styles.buttonText}>Submit</Text>
+</TouchableOpacity>
+
+// ❌ Button ist schwer zu stylen
+<Button title="Submit" onPress={handlePress} />
+```
+
+---
+
+## 🔄 State Management
+
+### Wann `useState` nutzen?
+
+```typescript
+// ✅ Für UI-lokalen State (Form Inputs, Toggles, etc.)
+const [email, setEmail] = useState('');
+const [isVisible, setIsVisible] = useState(false);
+
+// ❌ Nicht für: API Daten, User Session, App-weiter State
+// → Diese gehören in einen externen State Manager (später)
+```
+
+---
+
+## 🎯 Definition of Done
+
+Bevor du einen PR öffnest, checke:
+
+- [ ] Code folgt Naming Conventions (`*View.tsx`, `*Props`, etc.)
+- [ ] Keine hardcoded Colors/Fonts (nur aus `src/theme/`)
+- [ ] TypeScript Types für alle Props definiert
+- [ ] `npm run lint` läuft ohne Fehler
+- [ ] `npm run typecheck` läuft ohne Fehler
+- [ ] `npm test` läuft durch
+- [ ] View funktioniert auf Web (Test mit `npm run web`)
+- [ ] Keine `console.log` Statements vergessen
+- [ ] Business Logic ist außerhalb der View (via Props)
+
+---
+
+## 🚨 Häufige Fehler
+
+### 1. Font Loading Race Condition
+
+```typescript
+// ❌ BAD: View rendert bevor Fonts geladen sind
+export default function App() {
+  const [fontsLoaded] = useFonts({ /* ... */ });
+  return <LoginView />;  // Fonts noch nicht da!
+}
+
+// ✅ GOOD: Warte auf Fonts
+export default function App() {
+  const [fontsLoaded] = useFonts({ /* ... */ });
+  
+  if (!fontsLoaded) {
+    return null;  // Oder Loading Spinner
+  }
+  
+  return <LoginView />;
+}
+```
+
+### 2. Fehlende Platform Check
+
+```typescript
+// ❌ BAD: iOS-spezifisches Feature ohne Check
+<SomeComponent behavior="padding" />
+
+// ✅ GOOD: Platform Check
+<SomeComponent behavior={Platform.OS === 'ios' ? 'padding' : 'height'} />
+```
+
+### 3. Uncontrolled Inputs
+
+```typescript
+// ❌ BAD: Uncontrolled (schwer zu testen)
+<TextInput defaultValue="test" />
+
+// ✅ GOOD: Controlled mit useState
+const [value, setValue] = useState('test');
+<TextInput value={value} onChangeText={setValue} />
+```
+
+---
+
+## 🔍 Debugging Workflows
+
+### Metro Bundler Probleme
+
+```bash
+# 1. Cache löschen
+npx expo start --clear
+
+# 2. node_modules neu installieren
+rm -rf node_modules package-lock.json
+npm install
+
+# 3. Watchman Cache löschen (macOS)
+watchman watch-del-all
+```
+
+### TypeScript Errors
+
+```bash
+# TypeScript Compiler isoliert ausführen
+npx tsc --noEmit
+
+# Mit verbose output
+npx tsc --noEmit --listFiles
+```
+
+### Layout Debugging
+
+```typescript
+// Temporär border hinzufügen um Layout zu sehen
+const styles = StyleSheet.create({
+  debugBox: {
+    borderWidth: 2,
+    borderColor: 'red',  // Oder Colors.primary für Theme-Farbe
+  },
+});
+```
+
+---
+
+## 🚀 Nächste Schritte
+
+Dieses Projekt ist noch in früher Entwicklung. Geplant:
+
+- [ ] **Navigation:** React Navigation oder Expo Router
+- [ ] **State Management:** Context API oder Zustand
+- [ ] **API Integration:** Axios + React Query
+- [ ] **Authentication:** JWT Token Management
+- [ ] **Testing:** E2E Tests mit Detox
+- [ ] **CI/CD:** Automatische Builds und Deployments
+
+---
+
+**Bei Fragen:** Schau zuerst in die [README.md](README.md) oder frag im Team! 🤝
