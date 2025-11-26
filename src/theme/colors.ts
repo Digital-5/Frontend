@@ -44,7 +44,7 @@ export const Colors = {
   warning: '#FF9800',
   info: '#6CC5C2',               // Slate Blue
 
-  //Caht Colors 
+  //Chat Colors 
   ChatColorRead: '#0E0A1E',
   ChatColorUnread: '#150F2E'
 
