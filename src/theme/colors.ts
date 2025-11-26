@@ -43,6 +43,11 @@ export const Colors = {
   error: '#F44336',
   warning: '#FF9800',
   info: '#6CC5C2',               // Slate Blue
+
+  //Caht Colors 
+  ChatColorRead: '#0E0A1E',
+  ChatColorUnread: '#150F2E'
+
 };
 
 export default Colors;
