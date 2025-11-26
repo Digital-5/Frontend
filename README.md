@@ -4,7 +4,25 @@ Ein modernes **React Native** Projekt mit **Expo** für iOS, Android und Web.
 
 ---
 
-## 🚀 Quick Start
+## � Voraussetzungen
+
+Bevor du startest, stelle sicher, dass **Node.js** auf deinem System installiert ist:
+
+- **Node.js** >= 18.x ([Download](https://nodejs.org/))
+- **npm** (wird automatisch mit Node.js installiert)
+
+Prüfe deine Installation:
+
+```bash
+node --version   # Sollte v18.x.x oder höher anzeigen
+npm --version    # Sollte eine Version anzeigen
+```
+
+> **Hinweis:** Ohne Node.js funktionieren `npm install` und andere Commands nicht!
+
+---
+
+## �🚀 Quick Start
 
 ### Installation
 
