@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import {
   Roboto_100Thin,
@@ -16,7 +15,6 @@ import {
   Roboto_900Black_Italic,
   useFonts,
 } from '@expo-google-fonts/roboto';
-import SignupView from './src/views/SignupView';
 import { ChatOverview } from './src/views';
 
 
