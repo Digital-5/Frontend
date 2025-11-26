@@ -16,7 +16,7 @@ import {
   Roboto_900Black_Italic,
   useFonts,
 } from '@expo-google-fonts/roboto';
-import LoginView from './src/views/LoginView';
+import SignupView from './src/views/SignupView';
 
 // Prevent the splash screen from auto-hiding until fonts are ready
 SplashScreen.preventAutoHideAsync();
@@ -55,7 +55,7 @@ export default function App() {
 
   return (
     <>
-      <LoginView />
+      <SignupView />
       <StatusBar style="auto" />
     </>
   );
