@@ -11,7 +11,6 @@ type SignupViewProps = {
 export default function SignupView({ onSubmit }: SignupViewProps) {
     const [username, setUsername] = useState('');
     const [getHelpBtn, setGetHelpBtn] = useState(false);
-    const [information, setInformation] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(false);
 
     const handleSignup = () => {
@@ -39,7 +38,7 @@ export default function SignupView({ onSubmit }: SignupViewProps) {
                         onChangeText={setUsername}
                     />
                     <TouchableOpacity style={styles.infoIcon} onPress={() => setShowInfoModal(true)}>
-                        <Text>{information ? 'ℹ️' : 'ℹ️'}</Text>
+                        <Text>{'ℹ️'}</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={[styles.button, username === '' && styles.buttonDisabled]} onPress={handleSignup} disabled={username === ''}>
