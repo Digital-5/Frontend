@@ -17,6 +17,8 @@ import {
   useFonts,
 } from '@expo-google-fonts/roboto';
 import SignupView from './src/views/SignupView';
+import { ChatOverview } from './src/views';
+
 
 // Prevent the splash screen from auto-hiding until fonts are ready
 SplashScreen.preventAutoHideAsync();
@@ -55,8 +57,8 @@ export default function App() {
 
   return (
     <>
-      <SignupView />
-      <StatusBar style="auto" />
+      <ChatOverview />
+      
     </>
   );
 }
