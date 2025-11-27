@@ -85,13 +85,7 @@ const SPACING = {
   xxl: 48,
 };
 
-// Beispiel
-const styles = StyleSheet.create({
-  container: {
-    padding: 24,        // SPACING.lg
-    marginBottom: 16,   // SPACING.md
-  },
-});
+
 ```
 
 ### Border Radius
@@ -158,7 +152,7 @@ Für Formulare auf Mobile:
 import { KeyboardAvoidingView, Platform } from 'react-native';
 
 <KeyboardAvoidingView
-  style={styles.container}
+  style={Style.container}
   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 >
   {/* Form Content */}
@@ -184,8 +178,8 @@ const [value, setValue] = useState('');
 
 ```typescript
 // ✅ Nutze TouchableOpacity für Custom Styling
-<TouchableOpacity style={styles.button} onPress={handlePress}>
-  <Text style={styles.buttonText}>Submit</Text>
+<TouchableOpacity style={Style.button} onPress={handlePress}>
+  <Text style={Style.buttonText}>Submit</Text>
 </TouchableOpacity>
 
 // ❌ Button ist schwer zu stylen

@@ -1,6 +1,7 @@
-import { Modal as RNModal, View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { Modal as RNModal, View, Text, TouchableOpacity } from 'react-native';
 import Colors from '../theme/colors';
-import Fonts from '../theme/fonts';
+import { Style } from '../theme/style'
+
 
 type ModalProps = {
   visible: boolean;
@@ -50,11 +51,11 @@ export default function Modal({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.modalContainer}>
+      <View style={Style.overlay}>
+        <View style={Style.popupContainer}>
           {/* Icon Indicator */}
-          <View style={[styles.iconContainer, { backgroundColor: getIconColor() }]}>
-            <Text style={styles.iconText}>
+          <View style={[Style.iconContainer, { backgroundColor: getIconColor() }]}>
+            <Text style={Style.iconText}>
               {type === 'success' && '✓'}
               {type === 'error' && '✕'}
               {type === 'warning' && '!'}
@@ -63,27 +64,27 @@ export default function Modal({
           </View>
 
           {/* Title */}
-          {title && <Text style={styles.title}>{title}</Text>}
+          {title && <Text style={Style.modalTitle}>{title}</Text>}
 
           {/* Message */}
-          <Text style={styles.message}>{message}</Text>
+          <Text style={Style.message}>{message}</Text>
 
           {/* Buttons */}
-          <View style={styles.buttonContainer}>
+          <View style={Style.buttonContainer}>
             {cancelText && (
               <TouchableOpacity
-                style={[styles.button, styles.cancelButton]}
+                style={[Style.button, Style.cancelButton]}
                 onPress={onClose}
               >
-                <Text style={styles.cancelButtonText}>{cancelText}</Text>
+                <Text style={Style.cancelButtonText}>{cancelText}</Text>
               </TouchableOpacity>
             )}
 
             <TouchableOpacity
-              style={[styles.button, styles.confirmButton]}
+              style={[Style.button, Style.confirmButton]}
               onPress={handleConfirm}
             >
-              <Text style={styles.confirmButtonText}>{confirmText}</Text>
+              <Text style={Style.confirmButtonText}>{confirmText}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -91,92 +92,3 @@ export default function Modal({
     </RNModal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContainer: {
-    backgroundColor: Colors.inputBackground,
-    borderRadius: 16,
-    padding: 24,
-    width: '100%',
-    maxWidth: 400,
-    alignItems: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 8,
-      },
-      web: {
-        boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.3)',
-      },
-    }),
-  },
-  iconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  iconText: {
-    fontSize: 32,
-    color: '#FFFFFF',
-    fontFamily: Fonts.bold,
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: Fonts.bold,
-    color: Colors.textHeadline,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  message: {
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    color: Colors.textOnLight,
-    marginBottom: 24,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    width: '100%',
-  },
-  button: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  confirmButton: {
-    backgroundColor: Colors.primary,
-  },
-  confirmButtonText: {
-    color: Colors.buttonText,
-    fontSize: 16,
-    fontFamily: Fonts.medium,
-  },
-  cancelButton: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  cancelButtonText: {
-    color: Colors.textOnLight,
-    fontSize: 16,
-    fontFamily: Fonts.medium,
-  },
-});
