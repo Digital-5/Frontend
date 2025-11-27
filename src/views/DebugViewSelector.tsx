@@ -6,8 +6,9 @@ import ChatOverview from './ChatOverview';
 import LoginView from './LoginView';
 import SignupView from './SignupView';
 import ExampleModalView from './ExampleModalView';
+import ChatView from './ChatView';
 
-type ViewName = 'menu' | 'chat' | 'login' | 'signup' | 'modal';
+type ViewName = 'menu' | 'chat' | 'login' | 'signup' | 'modal' | 'chatview';
 
 interface MenuItem {
   id: ViewName;
@@ -19,6 +20,7 @@ const MENU_ITEMS: MenuItem[] = [
   { id: 'login', label: 'Login View' },
   { id: 'signup', label: 'Signup View' },
   { id: 'modal', label: 'Modal View' },
+  { id: 'chatview', label: 'Chat View' },
 ];
 
 export default function DebugViewSelector() {
@@ -34,6 +36,8 @@ export default function DebugViewSelector() {
         return <SignupView />;
       case 'modal':
         return <ExampleModalView />;
+      case 'chatview':
+        return <ChatView />;
       default:
         return (
           <View style={styles.menuContainer}>

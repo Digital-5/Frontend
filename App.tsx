@@ -17,6 +17,7 @@ import {
 } from '@expo-google-fonts/roboto';
 import DebugViewSelector from './src/views/DebugViewSelector';
 
+
 // Prevent the splash screen from auto-hiding until fonts are ready
 SplashScreen.preventAutoHideAsync();
 
@@ -55,6 +56,7 @@ export default function App() {
   return (
     <>
       <DebugViewSelector />
+      
     </>
   );
 }
