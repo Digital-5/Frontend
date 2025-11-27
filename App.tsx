@@ -15,7 +15,7 @@ import {
   Roboto_900Black_Italic,
   useFonts,
 } from '@expo-google-fonts/roboto';
-import { ChatOverview } from './src/views';
+import DebugViewSelector from './src/views/DebugViewSelector';
 
 
 // Prevent the splash screen from auto-hiding until fonts are ready
@@ -55,7 +55,7 @@ export default function App() {
 
   return (
     <>
-      <ChatOverview />
+      <DebugViewSelector />
       
     </>
   );
