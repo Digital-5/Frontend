@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Colors from '../theme/colors';
-import Fonts from '../theme/fonts';
+import { Image, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+// import Colors from '../theme/colors';
 import { Modal } from '../components';
+import { Style } from '../theme/style';
+
 
 type SignupViewProps = {
     onSubmit?: (_credentials: { username: string }) => void;
@@ -24,28 +25,28 @@ export default function SignupView({ onSubmit }: SignupViewProps) {
 
     return (
         <KeyboardAvoidingView
-            style={styles.container}
+            style={Style.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-            <View style={styles.formContainer}>
+            <View style={Style.formContainer}>
                 <Image source={require('../../assets/D5_icon.png')} style={{ width: 250, height: 250, alignSelf: 'center', marginBottom: 20 }} />
-                <Text style={styles.title}>Sign Up</Text>
-                <View style={styles.inputContainer}>
+                <Text style={Style.title}>Sign Up</Text>
+                <View style={Style.inputContainer}>
                     <TextInput
-                        style={styles.input}
+                        style={Style.input}
                         placeholder="Username"
                         value={username}
                         onChangeText={setUsername}
                     />
-                    <TouchableOpacity style={styles.infoIcon} onPress={() => setShowInfoModal(true)}>
+                    <TouchableOpacity style={Style.infoIcon} onPress={() => setShowInfoModal(true)}>
                         <Text>{'ℹ️'}</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={[styles.button, username === '' && styles.buttonDisabled]} onPress={handleSignup} disabled={username === ''}>
-                    <Text style={styles.buttonText}>Request Access</Text>
+                <TouchableOpacity style={[Style.button, username === '' && Style.buttonDisabled]} onPress={handleSignup} disabled={username === ''}>
+                    <Text style={Style.buttonText}>Request Access</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.forgotPassword} onPress={showHelp}>
-                   <Text style={styles.forgotPasswordText}>Need help?</Text>
+                <TouchableOpacity style={Style.forgotPassword} onPress={showHelp}>
+                   <Text style={Style.forgotPasswordText}>Need help?</Text>
                 </TouchableOpacity>
             </View>
 
@@ -69,65 +70,3 @@ export default function SignupView({ onSubmit }: SignupViewProps) {
         </KeyboardAvoidingView>
     );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  formContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-  },
-  title: {
-    fontSize: 32,
-    fontFamily: Fonts.bold,
-    marginBottom: 40,
-    textAlign: 'center',
-    color: Colors.textHeadline,
-  },
-   inputContainer: {
-    position: 'relative',  // Parent muss relative sein
-  },
-  input: {
-    backgroundColor: Colors.inputBackground,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  infoIcon: {
-    position: 'absolute',
-    right: 10,
-    top: 12,
-  },
-  button: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 15,
-    borderRadius: 8,
-    marginTop: 10,
-    marginBottom: 15,
-  },
-  buttonDisabled: {
-    backgroundColor: Colors.border, // Hellerer Farbton für deaktivierten Zustand
-  },
-  buttonText: {
-    color: Colors.buttonText,
-    textAlign: 'center',
-    fontSize: 16,
-    fontFamily: Fonts.medium,
-  },
-  forgotPassword: {
-    alignItems: 'center',
-  },
-  forgotPasswordText: {
-    color: Colors.link,
-    fontSize: 14,
-    fontFamily: Fonts.regular,
-  },
-});

@@ -21,6 +21,7 @@ export const Colors = {
   background: '#A3BCF955',       // Baby Blue Ice mit Transparenz
   backgroundLight: '#ECF1FE',    // Ghost White
   backgroundDark: '#0E0A1E',     // Ink Black
+  backgroundDarkHighlight: '#150F2E', // Custom dark highlight
   white: '#FFFFFF',
   
   // Text Colors
@@ -38,11 +39,18 @@ export const Colors = {
   inputBackground: '#FFFFFF',    // Weiß - Input Felder
   inputBorder: '#A3BCF9',        // Baby Blue Ice - Input Borders
   
-  // Status Colors (optional)
+  // Status Colors
   success: '#4CAF50',
+  online: '#4CD964',             // Grün - Online Status
   error: '#F44336',
   warning: '#FF9800',
   info: '#6CC5C2',               // Slate Blue
+
+  // Overlays & Shadows
+  overlay: 'rgba(0, 0, 0, 0.6)',
+  overlayDark: 'rgba(0, 0, 0, 0.5)',
+  overlayButton: '#2a2a2a',      // Sehr dunkel für Button-Overlays
+  black: '#000',                 // Schwarz für Shadows
 
   //Chat Colors 
   ChatColorRead: '#0E0A1E',

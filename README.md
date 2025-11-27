@@ -156,8 +156,8 @@ type ProfileViewProps = {
 
 export default function ProfileView({ username, onLogout }: ProfileViewProps) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome, {username}!</Text>
+    <View style={Style.container}>
+      <Text style={Style.title}>Welcome, {username}!</Text>
       {/* Weitere UI Komponenten */}
     </View>
   );

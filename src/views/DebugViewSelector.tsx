@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import Colors from '../theme/colors';
-import Fonts from '../theme/fonts';
+import { View, Text, /* StyleSheet, */ TouchableOpacity} from 'react-native';
+// import Colors from '../theme/colors';
+// import Fonts from '../theme/fonts';
 import ChatOverview from './ChatOverview';
 import LoginView from './LoginView';
 import SignupView from './SignupView';
 import ExampleModalView from './ExampleModalView';
+import { Style } from '../theme/style'
+
 import ChatView from './ChatView';
 
 type ViewName = 'menu' | 'chat' | 'login' | 'signup' | 'modal' | 'chatview';
@@ -40,19 +42,19 @@ export default function DebugViewSelector() {
         return <ChatView />;
       default:
         return (
-          <View style={styles.menuContainer}>
-            <Text style={styles.title}>Debug Menu</Text>
-            <Text style={styles.subtitle}>Select a view to debug</Text>
+          <View style={Style.menuContainer}>
+            <Text style={Style.title}>Debug Menu</Text>
+            <Text style={Style.subtitle}>Select a view to debug</Text>
             
-            <View style={styles.buttonContainer}>
+            <View style={Style.buttonContainer}>
               {MENU_ITEMS.map((item) => (
                 <TouchableOpacity
                   key={item.id}
-                  style={styles.button}
+                  style={Style.button}
                   onPress={() => setCurrentView(item.id)}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.buttonText}>{item.label}</Text>
+                  <Text style={Style.buttonText}>{item.label}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -62,78 +64,17 @@ export default function DebugViewSelector() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={Style.container}>
       {currentView !== 'menu' && (
         <TouchableOpacity 
-          style={styles.backButton}
+          style={Style.backButton}
           onPress={() => setCurrentView('menu')}
           activeOpacity={0.8}
         >
-          <Text style={styles.backButtonText}>← Back to Menu</Text>
+          <Text style={Style.backButtonText}>← Back to Menu</Text>
         </TouchableOpacity>
       )}
       {renderView()}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.backgroundDark,
-  },
-  menuContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontFamily: Fonts.bold,
-    color: '#ffffff',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    color: '#999999',
-    marginBottom: 40,
-  },
-  buttonContainer: {
-    width: '100%',
-    maxWidth: 300,
-    gap: 16,
-  },
-  button: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 8,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: Fonts.bold,
-    color: '#ffffff',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 1000,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  backButtonText: {
-    fontSize: 14,
-    fontFamily: Fonts.medium,
-    color: '#ffffff',
-  },
-});

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Modal } from '../components';
-import Colors from '../theme/colors';
-import Fonts from '../theme/fonts';
+import { Style } from '../theme/style'
+
 
 export default function ExampleView() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,19 +40,19 @@ export default function ExampleView() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal Beispiele</Text>
+    <View style={Style.container}>
+      <Text style={Style.title}>Modal Beispiele</Text>
 
-      <TouchableOpacity style={styles.button} onPress={showSuccessModal}>
-        <Text style={styles.buttonText}>Success Modal</Text>
+      <TouchableOpacity style={Style.button} onPress={showSuccessModal}>
+        <Text style={Style.buttonText}>Success Modal</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={showErrorModal}>
-        <Text style={styles.buttonText}>Error Modal</Text>
+      <TouchableOpacity style={Style.button} onPress={showErrorModal}>
+        <Text style={Style.buttonText}>Error Modal</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={showConfirmModal}>
-        <Text style={styles.buttonText}>Confirm Modal</Text>
+      <TouchableOpacity style={Style.button} onPress={showConfirmModal}>
+        <Text style={Style.buttonText}>Confirm Modal</Text>
       </TouchableOpacity>
 
       {/* Modal Component */}
@@ -73,31 +73,3 @@ export default function ExampleView() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontFamily: Fonts.bold,
-    color: Colors.textHeadline,
-    marginBottom: 30,
-    textAlign: 'center',
-  },
-  button: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 15,
-    borderRadius: 8,
-    marginBottom: 15,
-  },
-  buttonText: {
-    color: Colors.buttonText,
-    textAlign: 'center',
-    fontSize: 16,
-    fontFamily: Fonts.medium,
-  },
-});
