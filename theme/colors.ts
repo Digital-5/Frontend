@@ -39,7 +39,7 @@ export const Colors = {
   inputBorder: '#A3BCF9',        // Baby Blue Ice - Input Borders
   
   // Status Colors (optional)
-  success: '#4CAF50',
+  success: '#4CAF50',git s
   error: '#F44336',
   warning: '#FF9800',
   info: '#6CC5C2',               // Slate Blue
