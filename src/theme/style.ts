@@ -109,6 +109,7 @@ export const Style = StyleSheet.create({
     // LIST & CHAT ITEMS
     // ============================================
     listContainer: {
+        paddingTop: 20,
         paddingBottom: 20,
     },
     chatItem: {
@@ -352,6 +353,7 @@ export const Style = StyleSheet.create({
         color: Colors.link,
         fontSize: 14,
         fontFamily: Fonts.regular,
+        marginTop: 15,
     },
     
     // ============================================

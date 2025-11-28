@@ -17,6 +17,7 @@ export type IconName =
   | 'image'
   | 'microphone'
   | 'emoji'
+   | 'chat-plus-outline'
   
   // Message Status
   | 'checkmark-single'
@@ -51,7 +52,7 @@ export type IconName =
   | 'info';
 
 type IconConfig = {
-  library: 'Ionicons' | 'Entypo' | 'MaterialIcons' | 'AntDesign' | 'Feather';
+  library: 'Ionicons' | 'Entypo' | 'MaterialIcons' | 'AntDesign' | 'Feather' | 'MaterialCommunityIcons';
   name: string;
 };
 
@@ -71,6 +72,7 @@ const iconMap: Record<IconName, IconConfig> = {
   'image': { library: 'Ionicons', name: 'image' },
   'microphone': { library: 'Ionicons', name: 'mic' },
   'emoji': { library: 'Ionicons', name: 'happy-outline' },
+  'chat-plus-outline': { library: 'MaterialCommunityIcons', name: 'chat-plus-outline' },
   
   // Message Status
   'checkmark-single': { library: 'Ionicons', name: 'checkmark' },

@@ -200,7 +200,7 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
         onPress={handleNewChat}
         activeOpacity={0.8}
       >
-        <Ionicons name="chatbubble-ellipses-outline" size={28} color= {Colors.textOnDark} />
+        <Icon name="chat-plus-outline" size={28} color={Colors.white}/>
       </TouchableOpacity>
 
       {/* Modal für AddChatView */}
