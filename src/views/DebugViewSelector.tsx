@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { View, Text, /* StyleSheet, */ TouchableOpacity} from 'react-native';
-// import Colors from '../theme/colors';
-// import Fonts from '../theme/fonts';
+import { View, Text, TouchableOpacity} from 'react-native';
 import ChatOverview from './ChatOverview';
 import LoginView from './LoginView';
 import SignupView from './SignupView';

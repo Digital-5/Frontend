@@ -100,6 +100,30 @@ const RADIUS = {
 };
 ```
 
+### Icon-Nutzung
+
+Verwende die zentrale Icon-Library über das `Icon`-Component, damit Icons im Projekt konsistent sind und in `src/theme/icons.ts` zentral gemappt werden.
+
+Beispiele:
+
+```tsx
+import Colors from '../theme/colors';
+import { Icon } from '../components';
+
+// In JSX
+<Icon name="chat-plus-outline" size={24} color={Colors.primary} />
+<Icon name="search" size={20} color={Colors.textPlaceholder} />
+```
+
+Wo die Icon-Namen definiert sind:
+
+- Öffne `src/theme/icons.ts` — dort ist der Typ `IconName` (Liste verfügbarer Namen) und das `iconMap` mit der Zuordnung zu Icon-Libraries.
+- Falls du ein neues Icon hinzufügen willst, erweitere zuerst die `IconName`-Union und ergänze anschließend `iconMap` mit `{ library: '<LibraryName>', name: '<icon-name-in-lib>' }`.
+
+Hinweis: Das `Icon`-Component unterstützt mehrere Icon-Libraries (z.B. `Ionicons`, `MaterialCommunityIcons`, `Entypo`, `AntDesign`, `Feather`). Wähle die passende Library, wenn du eine neue Zuordnung anlegst.
+
+```
+
 ---
 
 ## 📝 Code Conventions
