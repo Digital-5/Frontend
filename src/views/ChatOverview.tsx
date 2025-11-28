@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   View,
   Text,
-  // StyleSheet,
   FlatList,
   TouchableOpacity,
   Image,
@@ -10,9 +9,7 @@ import {
   Modal,
 } from 'react-native';
 import Colors from '../theme/colors';
-// import Fonts from '../theme/fonts';
 import { Style } from '../theme/style';
-import { Ionicons } from '@expo/vector-icons';
 import AddChatView from './AddChatView'; 
 import { Icon } from '../components';
 
