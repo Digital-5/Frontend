@@ -1,4 +1,4 @@
-import { AntDesign, Ionicons, Entypo, MaterialIcons, Feather } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { getIcon, type IconName } from '../theme/icons';
 
 type IconProps = {
@@ -23,5 +23,10 @@ export default function Icon({ name, size = 24, color = '#000' }: IconProps) {
       return <AntDesign {...props} />;
     case 'Feather':
       return <Feather {...props} />;
+    case 'MaterialCommunityIcons':
+      return <MaterialCommunityIcons {...props} />;
+    
   }
+  // Fallback if library not matched
+  return null;
 }
