@@ -5,10 +5,10 @@ import LoginView from './LoginView';
 import SignupView from './SignupView';
 import ExampleModalView from './ExampleModalView';
 import { Style } from '../theme/style'
-
 import ChatView from './ChatView';
+import StoreKey from '../components/SecureStoreTest';
 
-type ViewName = 'menu' | 'chat' | 'login' | 'signup' | 'modal' | 'chatview';
+type ViewName = 'menu' | 'chat' | 'login' | 'signup' | 'modal' | 'chatview' | 'storeKey';
 
 interface MenuItem {
   id: ViewName;
@@ -21,6 +21,7 @@ const MENU_ITEMS: MenuItem[] = [
   { id: 'signup', label: 'Signup View' },
   { id: 'modal', label: 'Modal View' },
   { id: 'chatview', label: 'Chat View' },
+  { id: 'storeKey', label: 'Store Key' },
 ];
 
 export default function DebugViewSelector() {
@@ -38,6 +39,8 @@ export default function DebugViewSelector() {
         return <ExampleModalView />;
       case 'chatview':
         return <ChatView />;
+      case 'storeKey':
+        return <StoreKey />;
       default:
         return (
           <View style={Style.menuContainer}>
