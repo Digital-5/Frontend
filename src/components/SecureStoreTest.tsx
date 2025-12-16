@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native';
 import * as StoreKeys from './StoreKeys';
+import { generateKeys } from './Keys';
 
 export default function StoreKey() {
   const [keyName, setKeyName] = useState('');
@@ -41,6 +42,23 @@ export default function StoreKey() {
           placeholderTextColor="#999"
         />
         <Button title="Key laden" onPress={() => StoreKeys.getValue(loadKeyName)} />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.label}>Keys generieren:</Text>
+        <Button
+          title="Alle Keys generieren"
+          onPress={async () => {
+            try {
+              await generateKeys();
+              console.log('✅ Alle Keys erfolgreich generiert!');
+              alert('Alle Keys erfolgreich generiert!');
+            } catch (error) {
+              console.error('❌ Fehler beim Generieren der Keys:', error);
+              alert('Fehler: ' + error);
+            }
+          }}
+        />
       </View>
     </View>
   );
