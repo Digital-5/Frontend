@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native';
 import * as StoreKeys from './StoreKeys';
 import { generateKeys } from './Keys';
+import { requestUserPermission } from './Notifications';
 
 export default function StoreKey() {
   const [keyName, setKeyName] = useState('');
@@ -43,7 +44,6 @@ export default function StoreKey() {
         />
         <Button title="Key laden" onPress={() => StoreKeys.getValue(loadKeyName)} />
       </View>
-
       <View style={styles.section}>
         <Text style={styles.label}>Keys generieren:</Text>
         <Button
@@ -60,9 +60,27 @@ export default function StoreKey() {
           }}
         />
       </View>
+
+      <View style={styles.section}>
+        <Text style={styles.label}>Benachrichtigungen:</Text>
+        <Button
+          title="Benachrichtigungs-Berechtigung anfordern"
+          onPress={async () => {
+            try {
+              await requestUserPermission();
+              console.log('✅ Berechtigung angefordert!');
+              alert('Berechtigung angefordert!');
+            } catch (error) {
+              console.error('❌ Fehler bei Benachrichtigung:', error);
+              alert('Fehler: ' + error);
+            }
+          }}
+        />
+      </View>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

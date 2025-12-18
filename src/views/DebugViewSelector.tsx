@@ -6,7 +6,7 @@ import SignupView from './SignupView';
 import ExampleModalView from './ExampleModalView';
 import { Style } from '../theme/style'
 import ChatView from './ChatView';
-import StoreKey from '../components/SecureStoreTest';
+import StoreKey from '../service/SecureStoreTest';
 
 type ViewName = 'menu' | 'chat' | 'login' | 'signup' | 'modal' | 'chatview' | 'storeKey';
 
