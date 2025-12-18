@@ -1,21 +1,19 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   View,
   Text,
-  // StyleSheet,
   FlatList,
   TouchableOpacity,
   Image,
   TextInput,
   Modal,
-} from 'react-native';
-import Colors from '../theme/colors';
-// import Fonts from '../theme/fonts';
-import { Style } from '../theme/style';
-import { Ionicons } from '@expo/vector-icons';
-import AddChatView from './AddChatView'; 
-import { Icon } from '../components';
-
+} from "react-native";
+import Colors from "../theme/colors";
+import { Style } from "../theme/style";
+import { Ionicons } from "@expo/vector-icons";
+import AddChatView from "./AddChatView";
+import SettingView from "./SettingView"; // Add this import
+import { Icon } from "../components";
 
 interface Chat {
   id: string;
@@ -30,20 +28,20 @@ interface Chat {
 // Mock-Daten für die Chat-Liste
 const MOCK_CHATS: Chat[] = [
   {
-    id: 'UNC',
-    name: 'Uncle Liri',
-    lastMessage: 'JONAS IST DER BESTE',
-    timestamp: '10:30',
-    avatar: require('../../assets/profile.jpeg'),
+    id: "UNC",
+    name: "Uncle Liri",
+    lastMessage: "JONAS IST DER BESTE",
+    timestamp: "10:30",
+    avatar: require("../../assets/profile.jpeg"),
     unreadCount: 3,
     isOnline: true,
   },
   {
-    id: 'Erwin',
-    name: 'Coding Goat',
-    lastMessage: 'Liridon du alter Sack',
-    timestamp: '09:15',
-    avatar: require('../../assets/profile.jpeg'),
+    id: "Erwin",
+    name: "Coding Goat",
+    lastMessage: "Liridon du alter Sack",
+    timestamp: "09:15",
+    avatar: require("../../assets/profile.jpeg"),
     unreadCount: 0,
     isOnline: false,
   },
@@ -55,9 +53,9 @@ type ChatOverviewProps = {
 
 export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
   const [chats] = useState<Chat[]>(MOCK_CHATS);
-  const [searchText, setSearchText] = useState('');
-  const [showAddChat, setShowAddChat] = useState(false); // Füge diese Zeile hinzu
-
+  const [searchText, setSearchText] = useState("");
+  const [showAddChat, setShowAddChat] = useState(false);
+  const [showSettings, setShowSettings] = useState(false); // Add this state
 
   // Filter Chats nach Suchtext
   const filteredChats = chats.filter((chat) =>
@@ -74,26 +72,23 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
   //Action Handler
 
   const handleChatPress = (chat: Chat) => {
-    console.log('Chat geöffnet:', chat.id);
+    console.log("Chat geöffnet:", chat.id);
     onChatPress?.(chat);
   };
   const handleProfilePress = () => {
-    console.log('Profil-Menü geöffnet');
-    // Hier kannst du zur Profil-Seite navigieren
+    setShowSettings(true); // Update this handler
+    console.log("Settings opened");
   };
 
   const handleNewChat = () => {
     setShowAddChat(true);
-    console.log('Neuen Chat erstellen');
+    console.log("Neuen Chat erstellen");
     // Navigation zu neuer Chat-Seite
   };
 
   const renderChatItem = ({ item }: { item: Chat }) => (
     <TouchableOpacity
-      style={[
-        Style.chatItem,
-        item.unreadCount > 0 && Style.chatItemUnread,
-      ]}
+      style={[Style.chatItem, item.unreadCount > 0 && Style.chatItemUnread]}
       onPress={() => handleChatPress(item)}
       activeOpacity={0.7}
     >
@@ -112,7 +107,6 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
           >
             {item.name}
           </Text>
-
         </View>
         <Text
           style={[
@@ -125,23 +119,22 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
         </Text>
       </View>
 
-
-    {/* Rechte Seite: Timestamp und Badge */}
-    <View style={Style.rightContainer}>
-      <Text
-        style={[
-          Style.timestamp,
-          item.unreadCount > 0 && Style.timestampUnread,
-        ]}
-      >
-        {item.timestamp}
-      </Text>
-      {item.unreadCount > 0 && (
-        <View style={Style.unreadBadge}>
-          <Text style={Style.unreadText}>{item.unreadCount}</Text>
-        </View>
-      )}
-    </View>
+      {/* Rechte Seite: Timestamp und Badge */}
+      <View style={Style.rightContainer}>
+        <Text
+          style={[
+            Style.timestamp,
+            item.unreadCount > 0 && Style.timestampUnread,
+          ]}
+        >
+          {item.timestamp}
+        </Text>
+        {item.unreadCount > 0 && (
+          <View style={Style.unreadBadge}>
+            <Text style={Style.unreadText}>{item.unreadCount}</Text>
+          </View>
+        )}
+      </View>
     </TouchableOpacity>
   );
   return (
@@ -149,22 +142,22 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
       {/* Header */}
       <View style={Style.header}>
         <Text style={Style.headerTitle}>Chats</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={Style.headerProfilePicture}
           onPress={handleProfilePress}
           activeOpacity={0.7}
         >
-        <Image 
-            source={require('../../assets/profile.jpeg')} 
+          <Image
+            source={require("../../assets/profile.jpeg")}
             style={Style.profileImage}
           />
-      </TouchableOpacity>
+        </TouchableOpacity>
       </View>
 
       {/* Suchleiste */}
       <View style={Style.searchContainer}>
         <Icon name="search" size={20} color={Colors.textPlaceholder} />
-        
+
         <TextInput
           style={Style.searchInput}
           placeholder="Search..."
@@ -188,19 +181,23 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
           <Text style={Style.emptyText}>There are no Chats</Text>
           <Text style={Style.emptySubtext}>
             {searchText
-              ? 'Try a different search term'
-              : 'Start a new conversation'}
+              ? "Try a different search term"
+              : "Start a new conversation"}
           </Text>
         </View>
       )}
 
       {/* Floating Action Button */}
-      <TouchableOpacity 
+      <TouchableOpacity
         style={Style.fab}
         onPress={handleNewChat}
         activeOpacity={0.8}
       >
-        <Ionicons name="chatbubble-ellipses-outline" size={28} color= {Colors.textOnDark} />
+        <Ionicons
+          name="chatbubble-ellipses-outline"
+          size={28}
+          color={Colors.textOnDark}
+        />
       </TouchableOpacity>
 
       {/* Modal für AddChatView */}
@@ -212,7 +209,16 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
       >
         <AddChatView onClose={() => setShowAddChat(false)} />
       </Modal>
+
+      {/* Modal für SettingView - Add this */}
+      <Modal
+        visible={showSettings}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowSettings(false)}
+      >
+        <SettingView onClose={() => setShowSettings(false)} />
+      </Modal>
     </View>
   );
 }
-
