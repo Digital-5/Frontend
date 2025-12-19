@@ -1,6 +1,6 @@
 import * as StoreKeys from './StoreKeys'
 import uuid from 'react-native-uuid'
-import {generateX25519Keys, generateKyberKeyPair, signKey} from 'signal-protocol-react-lib';
+import {generateX25519Keys, generateKyberKeyPair, signKey} from '../../../SignalProtocolReactLib/src/pqxdh/interfaces/CryptoInterface';
 
 
 // generate all necessary keys, sign the keys and store them securely
