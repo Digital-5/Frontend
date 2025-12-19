@@ -13,21 +13,37 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          path: Frontend
+
+      - name: Checkout SignalProtocolReactLib
+        uses: actions/checkout@v4
+        with:
+          repository: Digital-5/SignalProtocolReactLib
+          path: SignalProtocolReactLib
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'   # falls ihr npm nutzt
+          cache: 'npm'
+          cache-dependency-path: Frontend/package-lock.json
 
       - name: Install dependencies
+        working-directory: Frontend
         run: npm ci
 
       - name: Lint
+        working-directory: Frontend
         run: npm run lint
 
       - name: Type check
+        working-directory: Frontend
         run: npm run typecheck
+
+      - name: Tests
+        working-directory: Frontend
+        run: npm test -- --watch=false
 
       - name: Tests
         run: npm test -- --watch=false
