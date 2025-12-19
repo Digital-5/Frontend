@@ -6,8 +6,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true
-  },
-  "exclude": [
-    "src/service/Keys.ts"
-  ]
+  }
 }
