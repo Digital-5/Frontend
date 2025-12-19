@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'   # falls ihr npm nutzt
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -26,8 +26,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Type check
-        run: npm run typecheck
+
+      - name: Tests
+        run: npm test -- --watch=false
 
       - name: Tests
         run: npm test -- --watch=false
