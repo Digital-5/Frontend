@@ -1,18 +1,22 @@
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Platform, ImageSourcePropType, Image} from 'react-native';
 import Colors from '../theme/colors';
 import Fonts from '../theme/fonts';
 import { Icon } from '../components';
 
 type ChatHeaderProps = {
+    profilePicture: ImageSourcePropType;
     chatPartnerName: string;
     onlineStatus: 'online' | 'offline';
     onBack: () => void;
+    onProfilePress?: () => void;
 }
 
 export default function ChatHeader({
+    profilePicture,
   chatPartnerName,
   onlineStatus,
   onBack,
+    onProfilePress,
 }: ChatHeaderProps){
 
   return (
@@ -20,8 +24,9 @@ export default function ChatHeader({
       <TouchableOpacity onPress={onBack} style={styles.backButton}>
         <Icon name="back" size={24} color={Colors.textOnDark} />
       </TouchableOpacity>
-
-      <View style={styles.chatInfo}>
+      <TouchableOpacity style={styles.profileContainer} onPress={() => console.log("Profile Options")}>
+        <Image source={profilePicture} style={styles.avatar} />
+        <View style={styles.chatInfo}>
         <Text style={styles.name}>{chatPartnerName}</Text>
         <View style={styles.statusContainer}>
           <View
@@ -32,8 +37,8 @@ export default function ChatHeader({
           />
           <Text style={styles.statusText}>{onlineStatus}</Text>
         </View>
-      </View>
-      
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => console.log('More options')} style={styles.moreButton}>
         <Icon name="more-options" size={24} color={Colors.textOnDark} />
       </TouchableOpacity>
@@ -56,6 +61,12 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
     marginRight: 8,
+  },
+  avatar: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    marginRight: 10,
   },
   chatInfo: {
     flex: 1,
@@ -83,5 +94,10 @@ const styles = StyleSheet.create({
   },
   moreButton: {
     padding: 8,
+  },
+  profileContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

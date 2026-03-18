@@ -15,7 +15,8 @@ import { Icon } from '../components';
 
 
 interface Chat {
-  id: string;
+  uuid: number;
+  username: string;
   name: string;
   lastMessage: string;
   timestamp: string;
@@ -27,7 +28,8 @@ interface Chat {
 // Mock-Daten für die Chat-Liste
 const MOCK_CHATS: Chat[] = [
   {
-    id: 'UNC',
+    uuid: 1,
+    username: 'UNC',
     name: 'Uncle Liri',
     lastMessage: 'JONAS IST DER BESTE',
     timestamp: '10:30',
@@ -36,11 +38,12 @@ const MOCK_CHATS: Chat[] = [
     isOnline: true,
   },
   {
-    id: 'Erwin',
+    uuid: 2,
+    username: 'Erwin',
     name: 'Coding Goat',
     lastMessage: 'Liridon du alter Sack',
     timestamp: '09:15',
-    avatar: require('../../assets/profile.jpeg'),
+    avatar: require('../../assets/D5_icon.png'),
     unreadCount: 0,
     isOnline: false,
   },
@@ -71,7 +74,7 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
   //Action Handler
 
   const handleChatPress = (chat: Chat) => {
-    console.log('Chat geöffnet:', chat.id);
+    console.log('Chat geöffnet:', chat.name);
     onChatPress?.(chat);
   };
   const handleProfilePress = () => {
@@ -176,7 +179,7 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
         <FlatList
           data={sortedChats}
           renderItem={renderChatItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.name}
           contentContainerStyle={Style.listContainer}
           showsVerticalScrollIndicator={false}
         />

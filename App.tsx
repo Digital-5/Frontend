@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   Roboto_100Thin,
   Roboto_100Thin_Italic,
@@ -54,9 +55,8 @@ export default function App() {
   }
 
   return (
-    <>
+    <SafeAreaProvider>
       <DebugViewSelector />
-      
-    </>
+    </SafeAreaProvider>
   );
 }

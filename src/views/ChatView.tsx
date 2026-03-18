@@ -1,42 +1,68 @@
-import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState, useEffect } from "react";
+import {KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, ImageSourcePropType} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '../theme/colors';
 import Fonts from '../theme/fonts';
-import { ChatHeader } from '../components';
+import {ChatHeader, Icon} from '../components';
 
 type ChatViewProps = {
-    onSubmit?: (_credentials: { username: string }) => void;
+    chatPartnerName?: string;
+    profilePicture?: ImageSourcePropType;
+    onBack?: () => void;
 };
 
-export default function ChatView({ onSubmit: _onSubmit }: ChatViewProps) {
+export default function ChatView({ chatPartnerName = 'Chat', profilePicture, onBack }: ChatViewProps) {
     const [username, setUsername] = useState('');
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
+    const insets = useSafeAreaInsets();
+
+    useEffect(() => {
+        const show = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
+        const hide = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
+        return () => { show.remove(); hide.remove(); };
+    }, []);
 
     const handleGoBack = () => {
-        console.log('Go back button pressed');
+        if (onBack) onBack();
+        else console.log('Go back button pressed');
     };
+
+    const handleSend = () => {
+        if (username.trim()) {
+            console.log('Message sent:', username);
+            setUsername('');
+        }
+    }
 
     return (
         <KeyboardAvoidingView
             style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior="padding"
+            keyboardVerticalOffset={0}
         >
             <ChatHeader
-                chatPartnerName="Jonas Mom"
+                profilePicture={profilePicture ?? require('../../assets/profile.jpeg')}
+                chatPartnerName={chatPartnerName}
                 onlineStatus="online"
                 onBack={handleGoBack}
             />
 
-            <View style={styles.formContainer}>
-                <Text style={styles.title}>Chat View</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Type a message..."
-                        placeholderTextColor={Colors.textPlaceholder}
-                        value={username}
-                        onChangeText={setUsername}
-                    />
-                </View>
+            <View style={styles.messagesContainer}>
+                {/* Hier würden die Chat-Nachrichten angezeigt werden */}
+            </View>
+
+            <View style={[styles.inputWrapper, { paddingBottom: keyboardVisible ? 8 : insets.bottom > 0 ? insets.bottom : 10 }]}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Type a message..."
+                    placeholderTextColor={Colors.textPlaceholder}
+                    value={username}
+                    onChangeText={setUsername}
+                    multiline
+                />
+                <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+                    <Text style={styles.sendButtonText}><Icon name="send" size={28} color={Colors.white}/></Text>
+                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
@@ -52,6 +78,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
+    messagesContainer: {
+        flex: 1,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+    },
   title: {
     fontSize: 32,
     fontFamily: Fonts.bold,
@@ -62,17 +93,43 @@ const styles = StyleSheet.create({
    inputContainer: {
     position: 'relative',  // Parent muss relative sein
   },
-  input: {
-    backgroundColor: Colors.inputBackground,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
+    inputWrapper: {
+        flexDirection: 'row',
+        paddingHorizontal: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
+        alignItems: 'flex-end',
+        gap: 8,
+        backgroundColor: Colors.ChatColorUnread,
+        width: '100%',
+    },
+    input: {
+        flex: 1,
+        backgroundColor: Colors.inputBackground,
+        paddingHorizontal: 15,
+        paddingVertical: 12,
+        borderRadius: 20,
+        fontSize: 16,
+        fontFamily: Fonts.regular,
+        borderWidth: 1,
+        borderColor: Colors.border,
+        maxHeight: 120,
+        minHeight: 44,
+    },
+    sendButton: {
+        backgroundColor: Colors.primary,
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+    },
+    sendButtonText: {
+        color: Colors.buttonText,
+        fontSize: 14,
+        fontFamily: Fonts.medium,
+    },
   infoIcon: {
     position: 'absolute',
     right: 10,
@@ -102,4 +159,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.regular,
   },
+
+
 });

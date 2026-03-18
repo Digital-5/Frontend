@@ -141,7 +141,9 @@ export const Style = StyleSheet.create({
         fontFamily: Fonts.bold,
         color: Colors.primaryLight,
     },
-    
+
+
+
     // ============================================
     // AVATAR & INDICATORS
     // ============================================
@@ -313,6 +315,7 @@ export const Style = StyleSheet.create({
         backgroundColor: Colors.overlayDark,
         paddingHorizontal: 16,
         paddingVertical: 10,
+        marginTop: 200,
         borderRadius: 8,
     },
     backButtonText: {

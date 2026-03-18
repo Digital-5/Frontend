@@ -26,11 +26,19 @@ const MENU_ITEMS: MenuItem[] = [
 
 export default function DebugViewSelector() {
   const [currentView, setCurrentView] = useState<ViewName>('menu');
+  const [selectedChat, setSelectedChat] = useState<{ name: string; avatar: any } | null>(null);
 
   const renderView = () => {
     switch (currentView) {
       case 'chat':
-        return <ChatOverview />;
+        return (
+          <ChatOverview
+            onChatPress={(chat) => {
+              setSelectedChat({ name: chat.name, avatar: chat.avatar });
+              setCurrentView('chatview');
+            }}
+          />
+        );
       case 'login':
         return <LoginView />;
       case 'signup':
@@ -38,7 +46,13 @@ export default function DebugViewSelector() {
       case 'modal':
         return <ExampleModalView />;
       case 'chatview':
-        return <ChatView />;
+        return (
+          <ChatView
+            chatPartnerName={selectedChat?.name ?? 'Chat'}
+            profilePicture={selectedChat?.avatar ?? require('../../assets/profile.jpeg')}
+            onBack={() => setCurrentView('chat')}
+          />
+        );
       case 'storeKey':
         return <StoreKey />;
       default:
@@ -66,13 +80,14 @@ export default function DebugViewSelector() {
 
   return (
     <View style={Style.container}>
-      {currentView !== 'menu' && (
-        <TouchableOpacity 
+      {currentView !== 'menu' && currentView !== 'chatview' && (
+        <TouchableOpacity
           style={Style.backButton}
           onPress={() => setCurrentView('menu')}
           activeOpacity={0.8}
+
         >
-          <Text style={Style.backButtonText}>← Back to Menu</Text>
+          <Text style={Style.backButtonText}>←</Text>
         </TouchableOpacity>
       )}
       {renderView()}
