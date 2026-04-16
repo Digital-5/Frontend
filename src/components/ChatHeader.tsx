@@ -1,103 +1,163 @@
-import {View, Text, TouchableOpacity, StyleSheet, Platform, ImageSourcePropType, Image} from 'react-native';
-import Colors from '../theme/colors';
-import Fonts from '../theme/fonts';
-import { Icon } from '../components';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, ImageSourcePropType, Image } from 'react-native';
+import { BlurView } from 'expo-blur';
+import { Ionicons } from '@expo/vector-icons';
+import LucidColors from '../theme/lucidColors';
+import LucidFonts from '../theme/lucidFonts';
 
 type ChatHeaderProps = {
-    profilePicture: ImageSourcePropType;
-    chatPartnerName: string;
-    onlineStatus: 'online' | 'offline';
-    onBack: () => void;
-    onProfilePress?: () => void;
-}
+  profilePicture: ImageSourcePropType;
+  chatPartnerName: string;
+  onlineStatus: 'online' | 'offline';
+  onBack: () => void;
+  onProfilePress?: () => void;
+  topInset?: number;
+};
+
+const HEADER_CONTENT_HEIGHT = 60;
 
 export default function ChatHeader({
-    profilePicture,
+  profilePicture,
   chatPartnerName,
   onlineStatus,
   onBack,
-    onProfilePress,
-}: ChatHeaderProps){
-
+  topInset = 0,
+}: ChatHeaderProps) {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onBack} style={styles.backButton}>
-        <Icon name="back" size={24} color={Colors.textOnDark} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.profileContainer} onPress={() => console.log("Profile Options")}>
-        <Image source={profilePicture} style={styles.avatar} />
-        <View style={styles.chatInfo}>
-        <Text style={styles.name}>{chatPartnerName}</Text>
-        <View style={styles.statusContainer}>
-          <View
-            style={[
-              styles.statusDot,
-              { backgroundColor: onlineStatus === 'online' ? '#4CAF50' : '#9E9E9E' },
-            ]}
-          />
-          <Text style={styles.statusText}>{onlineStatus}</Text>
-        </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => console.log('More options')} style={styles.moreButton}>
-        <Icon name="more-options" size={24} color={Colors.textOnDark} />
-      </TouchableOpacity>
-    </View>
+    <BlurView
+      intensity={50}
+      tint="dark"
+      style={[
+        styles.container,
+        {
+          height: topInset + HEADER_CONTENT_HEIGHT,
+          paddingTop: topInset,
+          backgroundColor: 'rgba(37, 34, 63, 0.65)',
+        },
+      ]}
+    >
+      <View style={styles.inner}>
+        {/* Back button */}
+        <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
+          <Ionicons name="chevron-back" size={26} color={LucidColors.onSurface} />
+        </TouchableOpacity>
+
+        {/* Avatar + name + status */}
+        <TouchableOpacity style={styles.profileArea} activeOpacity={0.8}>
+          {onlineStatus === 'online' ? (
+            <View style={styles.onlineHalo}>
+              <Image source={profilePicture} style={styles.avatar} />
+            </View>
+          ) : (
+            <Image source={profilePicture} style={styles.avatarOffline} />
+          )}
+          <View style={styles.chatInfo}>
+            <Text style={styles.name} numberOfLines={1}>{chatPartnerName}</Text>
+            <View style={styles.statusRow}>
+              <View
+                style={[
+                  styles.statusDot,
+                  {
+                    backgroundColor:
+                      onlineStatus === 'online'
+                        ? LucidColors.tertiary
+                        : LucidColors.outlineVariant,
+                  },
+                ]}
+              />
+              <Text style={styles.statusText}>{onlineStatus}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        {/* More options */}
+        <TouchableOpacity style={styles.moreButton} activeOpacity={0.7}>
+          <Ionicons name="ellipsis-vertical" size={22} color={LucidColors.onSurfaceVariant} />
+        </TouchableOpacity>
+      </View>
+    </BlurView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+  },
+  inner: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.ChatColorRead,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    // Für iOS Safe Area
-    paddingTop: Platform.OS === 'ios' ? 50 : 12,
+    paddingHorizontal: 12,
+    gap: 4,
   },
   backButton: {
-    padding: 8,
-    marginRight: 8,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  profileArea: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingLeft: 4,
+  },
+  onlineHalo: {
+    padding: 2,
+    borderRadius: 9999,
+    backgroundColor: LucidColors.tertiary,
+    flexShrink: 0,
   },
   avatar: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    marginRight: 10,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: LucidColors.surfaceDim,
+  },
+  avatarOffline: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    flexShrink: 0,
   },
   chatInfo: {
     flex: 1,
+    gap: 2,
   },
   name: {
     fontSize: 18,
-    fontFamily: Fonts.medium,
-    color: Colors.textOnDark,
-    marginBottom: 2,
+    fontFamily: LucidFonts.manropeSemiBold,
+    color: LucidColors.onSurface,
+    letterSpacing: -0.2,
   },
-  statusContainer: {
+  statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 5,
   },
   statusDot: {
-    width: 8,
-    height: 8,
+    width: 7,
+    height: 7,
     borderRadius: 4,
-    marginRight: 6,
   },
   statusText: {
     fontSize: 12,
-    fontFamily: Fonts.regular,
-    color: Colors.textOnDark,
+    fontFamily: LucidFonts.interRegular,
+    color: LucidColors.onSurfaceVariant,
   },
   moreButton: {
-    padding: 8,
-  },
-  profileContainer: {
-    flex: 1,
-    flexDirection: 'row',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
 });

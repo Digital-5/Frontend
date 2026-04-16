@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#9c7eff",
+                    "primary-fixed": "#a98fff",
+                    "tertiary-container": "#00e3fd",
+                    "secondary-fixed": "#c0d1ff",
+                    "surface-container-highest": "#25223f",
+                    "surface-container": "#19162f",
+                    "inverse-surface": "#fcf8ff",
+                    "surface-dim": "#0e0c20",
+                    "on-tertiary-container": "#004d57",
+                    "secondary-fixed-dim": "#acc3ff",
+                    "on-error": "#490013",
+                    "on-primary-fixed-variant": "#32008a",
+                    "on-primary-fixed": "#000000",
+                    "on-surface": "#e7e2ff",
+                    "secondary-container": "#0058ca",
+                    "on-primary": "#340090",
+                    "on-background": "#e7e2ff",
+                    "surface-bright": "#2b2848",
+                    "on-secondary-fixed-variant": "#004baf",
+                    "tertiary": "#81ecff",
+                    "on-tertiary-fixed": "#003840",
+                    "on-surface-variant": "#aca8c3",
+                    "surface-container-lowest": "#000000",
+                    "tertiary-fixed": "#00e3fd",
+                    "on-tertiary": "#005762",
+                    "on-secondary-container": "#f7f7ff",
+                    "primary": "#b6a0ff",
+                    "surface-container-low": "#131027",
+                    "primary-container": "#a98fff",
+                    "outline": "#76738c",
+                    "outline-variant": "#48455c",
+                    "primary-dim": "#7e51ff",
+                    "surface-tint": "#b6a0ff",
+                    "surface-container-high": "#1f1c37",
+                    "error-dim": "#d73357",
+                    "on-secondary-fixed": "#003076",
+                    "inverse-primary": "#6834eb",
+                    "surface": "#0e0c20",
+                    "secondary-dim": "#0f6df3",
+                    "secondary": "#6e9bff",
+                    "on-primary-container": "#280072",
+                    "tertiary-dim": "#00d4ec",
+                    "inverse-on-surface": "#55526a",
+                    "surface-variant": "#25223f",
+                    "error": "#ff6e84",
+                    "on-tertiary-fixed-variant": "#005762",
+                    "on-secondary": "#001d4e",
+                    "tertiary-fixed-dim": "#00d4ec",
+                    "error-container": "#a70138",
+                    "background": "#0e0c20",
+                    "on-error-container": "#ffb2b9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0e0c20;
+            color: #e7e2ff;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-header {
+            background: rgba(37, 34, 63, 0.6);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#25223f]/60 backdrop-blur-2xl shadow-[0_16px_48px_-12px_rgba(0,0,0,0.12)] flex items-center justify-between px-6 h-20 w-full transition-colors duration-300">
+<div class="flex items-center gap-4">
+<div class="relative">
+<img alt="Profile" class="w-10 h-10 rounded-full border-2 border-primary" data-alt="Professional portrait of a young man with a friendly expression, soft studio lighting, blurred office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyiWDpH6lBrCHRWIIJhZ_ZBRWac-Tl8pHVt8CFSgZmJkUimaJxSTM4WWHkwbuWFSZD46XvA9wDG6hMYv4jPoq37bKWPbUszcVDyTC2MgKef_DZnoz8YM8lxDxfApiwBK3elzXp-HEiDG-45dFwtlteyFWyPG6BgwIEKIqktUiDhfpXziUTJVdnmKRgX5Wl2GaDrKNe67_tdKtBCBSUHWZzyrbYO9zGjBA1OPR18ZSjIrcRIbFjmCyUZgYmjJG2CiLTO192J9q0MxA"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-tertiary rounded-full border-2 border-surface-dim"></div>
+</div>
+<h1 class="font-['Manrope'] text-2xl font-semibold tracking-tight text-[#e7e2ff]">Chats</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-[#aca8c3] hover:bg-[#1f1c37] transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-[#aca8c3] hover:bg-[#1f1c37] transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-6 space-y-6 max-w-3xl mx-auto">
+<!-- Search Section -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/15 rounded-full py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all font-body text-sm" placeholder="Search messages, people..." type="text"/>
+</div>
+<!-- Featured / Stories Row (Asymmetric Bento Style) -->
+<section class="grid grid-cols-4 gap-4 overflow-x-auto pb-2 scrollbar-hide">
+<div class="flex flex-col items-center space-y-2 flex-shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider">My Status</span>
+</div>
+<div class="flex flex-col items-center space-y-2 flex-shrink-0">
+<div class="p-0.5 rounded-full bg-gradient-to-tr from-primary to-tertiary">
+<img alt="User" class="w-16 h-16 rounded-full border-2 border-surface-dim object-cover" data-alt="Vibrant portrait of a woman laughing, colorful urban backdrop, neon lighting accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC61CEAHH1kOI7qzKEINGetUFL2MBGlRGnaDmF9X74zEbMVOCjtL45pBqsFV9P7jvBHFUcrQArfcl0LwcFgzS0WEpw5eQ3yVS_MP0ApEM-ZSdcMni3xKO6B8MSZ3IlAun1abGjBzX5FZ3mLBMBoPqGWxM2jJDB5gDfoMLNWg8UD0yh0LBN6r2nGGd7XkNm_8oyk2uAKSI_ULU3eV-dnLQG7NZTnfLl64fBTM55oiceYWy690-XWYVe_qAC3Tc8HoBIcxyzueB_MRdc"/>
+</div>
+<span class="text-[10px] font-semibold text-on-surface uppercase tracking-wider">Elena</span>
+</div>
+<div class="flex flex-col items-center space-y-2 flex-shrink-0">
+<div class="p-0.5 rounded-full bg-gradient-to-tr from-primary to-tertiary">
+<img alt="User" class="w-16 h-16 rounded-full border-2 border-surface-dim object-cover" data-alt="Close up portrait of a man with spectacles, warm sunset lighting, soft focus garden background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD7tYAxxXVntvj4fN2Z4a1wwVTzkG97S7ROGBGff_TeusfOuY6khYxxQdTqn39hALasHNNZxlWCo62kDKRmDjCLmW4HiYqm1bBOzBXDj9GOZTBtXiulBuqlrxd0pjG4AAkQ37gh6Vwp3hrIE11smhKjgdCh4_AG3z4Hk6RP76Hmsvjie8hohT73MR0PtrY0aszU7h8mHRGCVE4Rn0vdgzyzeSW_l4YgH3kjEHVeA9hudA6lw08XaIl3WwSGMg8ojO3o1CjaoS7BP0"/>
+</div>
+<span class="text-[10px] font-semibold text-on-surface uppercase tracking-wider">Marcus</span>
+</div>
+<div class="flex flex-col items-center space-y-2 flex-shrink-0">
+<div class="p-0.5 rounded-full bg-outline-variant/30">
+<img alt="User" class="w-16 h-16 rounded-full border-2 border-surface-dim object-cover grayscale opacity-80" data-alt="Cinematic portrait of a young woman in a leather jacket, cool blue hour lighting, city lights bokeh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5EGsZEuLv5UvICwAkhTtzEf1dYLbCC1neXUOTVBTbG7JDDfsVzW4txiAUf7dNEk35V9df6-D2Wx5TWsjxyjRLcUycS6cEHZfgtRtk0pDcLofvf09mhpkZUCC-FRYSNWAnOmKGn-fhxE0ySbP9yfLw_sMWUlmxBzffwUzzXXQqGDFP1RgvMN1JIx6rL_L3DXyQ4BJsjE9g81Z9gyW8cYquIXb9LsbDlk8RoA0rZbQIHzh6FI8MYhfCmWgnxyT0x4xCCQv-gZB-rug"/>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider">Sarah</span>
+</div>
+</section>
+<!-- Chat List -->
+<div class="space-y-1">
+<!-- Active Chat Item -->
+<div class="group flex items-center gap-4 p-4 rounded-lg transition-all duration-300 hover:bg-[#1f1c37] cursor-pointer">
+<div class="relative flex-shrink-0">
+<img alt="Julian" class="w-14 h-14 rounded-full object-cover" data-alt="Candid street portrait of a man with beard, natural daylight, soft urban textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnIE1T4TecHXSIBGkLGcRm-jMMJ-Nl9dLBX7X7C7lEljN4crXXm_o71zOjf5dqWasbyXN4xkCtHv8qySDhNtuVyPgS2abD9iTR1Krh7Kw823sk9rch-a4HV2zIBJ4lzNyvmnCd5pz3903wWfWH1KIl4JQ8QrBBVirvViJjc1dnvHtzCNpmsUSdOd3pgk6Avq4X6M3fUlYDwIg8HZk1Njur89TvUOnUQAIzM7qXt5BNupapMJ3JuwQIF4-ej0-li675wCS-tKdyb3c"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-tertiary rounded-full border-[3px] border-surface-dim shadow-[0_0_8px_rgba(129,236,255,0.4)]"></div>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-[#e7e2ff] truncate">Julian Vance</h3>
+<span class="text-[11px] text-primary-fixed-dim font-medium">2:45 PM</span>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-sm text-on-surface-variant truncate pr-4 font-body">Can you send over those design files from the workshop?</p>
+<div class="flex-shrink-0 bg-gradient-to-br from-primary to-primary-dim text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg shadow-primary-dim/20">3</div>
+</div>
+</div>
+</div>
+<div class="group flex items-center gap-4 p-4 rounded-lg transition-all duration-300 hover:bg-[#1f1c37] cursor-pointer">
+<div class="relative flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-fixed text-2xl">groups</span>
+</div>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-[#e7e2ff] truncate">Design System Guild</h3>
+<span class="text-[11px] text-on-surface-variant font-medium">1:20 PM</span>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-sm text-on-surface-variant truncate pr-4 font-body"><span class="text-primary font-medium">Alex:</span> The new tokens are live in Figma!</p>
+</div>
+</div>
+</div>
+<div class="group flex items-center gap-4 p-4 rounded-lg transition-all duration-300 hover:bg-[#1f1c37] cursor-pointer">
+<div class="relative flex-shrink-0">
+<img alt="Mia" class="w-14 h-14 rounded-full object-cover" data-alt="Close up of a creative professional woman, artistic studio lighting with warm and cool highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr6lcgFmKr6IV2518x-vPIobLlaEdtEIzllb8wkq2FvarGPlOz8EhfnCLqdMZrVzs1OthpffFyJ5oM4KVPR3Z54wJk5U9A2EjDc9YeGsDXXsc0CYFIlLwFXtnxEjnTqkBp5-V5No6gzRzjcOkDsiqqX7v7cBGr_MgwI0k5hH46zrkjPzLJ7D0UumCMTnAQ8xYXWTGHrHT8rFGT2U0xbgdGUtYpMP7O5siTwnOmlUIbFtGKT1oXNCSOUr6ThdskFyhnTObAfUNuY4Q"/>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-[#e7e2ff] truncate">Mia K.</h3>
+<span class="text-[11px] text-on-surface-variant font-medium">Yesterday</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-1 text-sm text-on-surface-variant truncate pr-4 font-body">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">done_all</span>
+<span>Talk soon, have a great evening!</span>
+</div>
+</div>
+</div>
+</div>
+<div class="group flex items-center gap-4 p-4 rounded-lg transition-all duration-300 hover:bg-[#1f1c37] cursor-pointer">
+<div class="relative flex-shrink-0">
+<img alt="Thomas" class="w-14 h-14 rounded-full object-cover" data-alt="Portrait of a man in casual wear, blurred city park background, soft evening light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCb5r6x6SHDtJREErYeAN1ffX7zNhQcg4oZ8kpAL73uaQR5snry3ZuSOc96kBzs6_miRdL-Obm0GIfjJXZwVrQ07c8P4Ej6S0VpgN4EGYCqMEYplDORBJ9JOBWBoEcqZeAfT6k0zl73VMlP2Vpzqo_fH0Sisa7JJH49pmhTg46Hxy3U_fwx2iSwTyeLFXwEjKjRFBTzj6cyga3SZvT1TJN5PzXQqyn3kKUtLpMOFH7moeW9ei34Fg3NGqUCAU4veyYUudq6pG8J9p8"/>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-[#e7e2ff] truncate">Thomas Wright</h3>
+<span class="text-[11px] text-on-surface-variant font-medium">Monday</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-1 text-sm text-on-surface-variant truncate pr-4 font-body">
+<span class="material-symbols-outlined text-[16px] text-tertiary">mic</span>
+<span>Voice message (0:42)</span>
+</div>
+</div>
+</div>
+</div>
+<div class="group flex items-center gap-4 p-4 rounded-lg transition-all duration-300 hover:bg-[#1f1c37] cursor-pointer">
+<div class="relative flex-shrink-0">
+<img alt="Lila" class="w-14 h-14 rounded-full object-cover" data-alt="Close up of a young woman with a reflective gaze, natural lighting through window, soft textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbYjcl1SPF6QzfR2g336xwIAbDSvglcNya2w-ow0gTG-D2B94XzlLTuy2s6wbYXoTzoj8wQ70vaDINKjt-fGvDR_RUyh3M1AZ2rA3sVI4PJUtx2ZxPX1jJOHz2OHltWx2wch-_rY_t4cxUrj5aJNT_FkfQqpMlkVEhf66PgUplFu72uRKqGfY30y8CNC4Y5Vc0JOO1KcQjUXv-s6MxkHhU2zluED4jFyrsW4WV8jrDb_WcVgyuCTiHw1gMKPl8MLKLodD1AgCD9_k"/>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-[#e7e2ff] truncate">Lila Ross</h3>
+<span class="text-[11px] text-on-surface-variant font-medium">May 12</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-1 text-sm text-on-surface-variant truncate pr-4 font-body">
+<span class="material-symbols-outlined text-[16px]">image</span>
+<span>Photo sent</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB: New Chat -->
+<button class="fixed bottom-28 right-6 w-16 h-16 bg-gradient-to-br from-[#b6a0ff] to-[#7e51ff] text-white rounded-full flex items-center justify-center shadow-xl shadow-[#7e51ff]/40 active:scale-90 transition-transform duration-200 z-40">
+<span class="material-symbols-outlined text-3xl">edit_square</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full h-24 flex justify-around items-center px-8 pb-4 bg-[#25223f]/60 backdrop-blur-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.2)] rounded-t-[2rem] z-50">
+<a class="flex items-center justify-center bg-gradient-to-br from-[#b6a0ff] to-[#7e51ff] text-white rounded-full p-3 scale-110 shadow-lg shadow-[#7e51ff]/30 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</a>
+<a class="flex items-center justify-center text-[#aca8c3] p-3 hover:text-[#e7e2ff] transition-all duration-300" href="#">
+<span class="material-symbols-outlined">group</span>
+</a>
+<a class="flex items-center justify-center text-[#aca8c3] p-3 hover:text-[#e7e2ff] transition-all duration-300" href="#">
+<span class="material-symbols-outlined">call</span>
+</a>
+<a class="flex items-center justify-center text-[#aca8c3] p-3 hover:text-[#e7e2ff] transition-all duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</nav>
+</body></html>
