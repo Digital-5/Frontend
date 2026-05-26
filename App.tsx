@@ -16,6 +16,17 @@ import {
   Roboto_900Black_Italic,
   useFonts,
 } from '@expo-google-fonts/roboto';
+import {
+  Manrope_600SemiBold,
+  Manrope_700Bold,
+  Manrope_800ExtraBold,
+} from '@expo-google-fonts/manrope';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from '@expo-google-fonts/inter';
 import DebugViewSelector from './src/views/DebugViewSelector';
 
 
@@ -36,6 +47,13 @@ export default function App() {
     Roboto_700Bold_Italic,
     Roboto_900Black,
     Roboto_900Black_Italic,
+    Manrope_600SemiBold,
+    Manrope_700Bold,
+    Manrope_800ExtraBold,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
   });
 
   const onLayoutRootView = useCallback(async () => {
