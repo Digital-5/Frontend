@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
+  FlatList,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -21,6 +22,11 @@ import { ChatHeader } from '../components';
 const HEADER_CONTENT_HEIGHT = 60;
 const INPUT_BAR_CONTENT_HEIGHT = 68;
 
+type ChatMessage = {
+  text: string;
+  isSent: boolean;
+};
+
 type ChatViewProps = {
   chatPartnerName?: string;
   profilePicture?: ImageSourcePropType;
@@ -38,6 +44,8 @@ export default function ChatView({
 
   const [message, setMessage] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
+  const flatListRef = useRef<FlatList<ChatMessage>>(null);
 
   useEffect(() => {
     const show = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
@@ -50,7 +58,7 @@ export default function ChatView({
 
   const handleSend = () => {
     if (message.trim()) {
-      console.log('Message sent:', message);
+      setChatLog(prev => [...prev, { text: message.trim(), isSent: true }]);
       setMessage('');
     }
   };
@@ -69,13 +77,65 @@ export default function ChatView({
             paddingTop: HEADER_HEIGHT,
             paddingBottom: keyboardVisible ? INPUT_BAR_CONTENT_HEIGHT + 8 : INPUT_BAR_HEIGHT,
           },
-        ]}
+        ]} 
       >
+        <FlatList
+          style={{ flex: 1 }}
+          data={chatLog}
+          ref={flatListRef}
+          renderItem={({ item, index }) => {
+            if (item.isSent) {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    backgroundColor: '#0078fe',
+                    padding: 10,
+                    marginLeft: '45%',
+                    borderRadius: 20,
+                    marginTop: 5,
+                    marginRight: '5%',
+                    maxWidth: '50%',
+                    alignSelf: 'flex-end',
+                  }}
+                >
+                  <Text style={{ fontSize: 16, color: '#fff' }}>{item.text}</Text>
+                  <View style={styles.rightArrow} />
+                  <View style={styles.rightArrowOverlap} />
+                </View>
+              );
+            } else {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    backgroundColor: '#dedede',
+                    padding: 10,
+                    borderRadius: 20,
+                    marginTop: 5,
+                    marginLeft: '5%',
+                    maxWidth: '50%',
+                    alignSelf: 'flex-start',
+                  }}
+                >
+                  <Text style={{ fontSize: 16, color: '#000' }}>{item.text}</Text>
+                  <View style={styles.leftArrow} />
+                  <View style={styles.leftArrowOverlap} />
+                </View>
+              );
+            }
+          }}
+          keyExtractor={(_item, index) => index.toString()}
+        />
+      
+
         {/* Placeholder empty-state */}
-        <View style={styles.emptyMessages}>
-          <Text style={styles.emptyText}>No messages yet</Text>
-          <Text style={styles.emptySubtext}>Send a message to start the conversation</Text>
-        </View>
+        {chatLog.length === 0 && (
+          <View style={styles.emptyMessages}>
+            <Text style={styles.emptyText}>No messages yet</Text>
+            <Text style={styles.emptySubtext}>Send a message to start the conversation</Text>
+          </View>
+        )}
       </View>
 
       {/* ── Glass Chat Header ──────────────────────────────────────────────── */}
@@ -131,6 +191,54 @@ export default function ChatView({
 }
 
 const styles = StyleSheet.create({
+
+  rightArrow: {
+  position: "absolute",
+  backgroundColor: "#0078fe",
+  //backgroundColor:"red",
+  width: 20,
+  height: 25,
+  bottom: 0,
+  borderBottomLeftRadius: 25,
+  right: -10
+},
+
+rightArrowOverlap: {
+  position: "absolute",
+  backgroundColor: LucidColors.surface,
+  //backgroundColor:"green",
+  width: 20,
+  height: 35,
+  bottom: -6,
+  borderBottomLeftRadius: 18,
+  right: -20
+
+},
+
+/*Arrow head for recevied messages*/
+leftArrow: {
+    position: "absolute",
+    backgroundColor: "#dedede",
+    //backgroundColor:"red",
+    width: 20,
+    height: 25,
+    bottom: 0,
+    borderBottomRightRadius: 25,
+    left: -10
+},
+
+leftArrowOverlap: {
+    position: "absolute",
+    backgroundColor: LucidColors.surface,
+    //backgroundColor:"green",
+    width: 20,
+    height: 35,
+    bottom: -6,
+    borderBottomRightRadius: 18,
+    left: -20
+
+},
+
   container: {
     flex: 1,
     backgroundColor: LucidColors.surface,
