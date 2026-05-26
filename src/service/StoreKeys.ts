@@ -8,13 +8,27 @@ export async function saveValue(key: string, value: string) {
 }
 
 // Function to get a value securely in Expo SecureStore using Androids Keystore system and iOS Keychain system
-export async function getValue(key:string) {
+export async function getValue(key:string): Promise<string | null> {
   let result = await SecureStore.getItemAsync(key);
-  if (result) {
-    console.log("Loaded key:", key, "with value:", result);
-  } else {
-    console.log('No values stored under that key.');
+  console.log("Loaded key:", key, "with value:", result);
+  return result;
+
+}
+
+const DB_KEY_STORE = 'realm_db_encryption_key';
+
+export async function getOrCreateDatabaseKey(): Promise<ArrayBuffer> {
+  let base64Key = await getValue(DB_KEY_STORE);
+  if (!base64Key) {
+    const bytes = new Uint8Array(64);
+    crypto.getRandomValues(bytes);
+    base64Key = btoa(String.fromCharCode(...bytes));
+    await saveValue(DB_KEY_STORE, base64Key);
   }
+  const binary = atob(base64Key);
+  const buffer = new Uint8Array(64);
+  for (let i = 0; i < 64; i++) buffer[i] = binary.charCodeAt(i);
+  return buffer.buffer;
 }
 
 //Function to delete a value securely in Expo SecureStore using Androids Keystore system and iOS Keychain system

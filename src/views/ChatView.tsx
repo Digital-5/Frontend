@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import LucidColors from '../theme/lucidColors';
 import LucidFonts from '../theme/lucidFonts';
 import { ChatHeader } from '../components';
+import { useMessages } from '../hooks/useMessages';
 
 const HEADER_CONTENT_HEIGHT = 60;
 const INPUT_BAR_CONTENT_HEIGHT = 68;
@@ -31,12 +32,14 @@ type ChatViewProps = {
   chatPartnerName?: string;
   profilePicture?: ImageSourcePropType;
   onBack?: () => void;
+  chatId?: string;           // ← neu
 };
 
 export default function ChatView({
   chatPartnerName = 'Chat',
   profilePicture,
   onBack,
+  chatId = "unique ID",
 }: ChatViewProps) {
   const insets = useSafeAreaInsets();
   const HEADER_HEIGHT = insets.top + HEADER_CONTENT_HEIGHT;
@@ -44,8 +47,9 @@ export default function ChatView({
 
   const [message, setMessage] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
-  const flatListRef = useRef<FlatList<ChatMessage>>(null);
+  const { messages, addMessage } = useMessages(chatId);
+  const flatListRef = useRef<FlatList>(null);  // ← diese Zeile ergänzen
+
 
   useEffect(() => {
     const show = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
@@ -58,7 +62,7 @@ export default function ChatView({
 
   const handleSend = () => {
     if (message.trim()) {
-      setChatLog(prev => [...prev, { text: message.trim(), isSent: true }]);
+      addMessage(message.trim(), true);
       setMessage('');
     }
   };
@@ -77,60 +81,49 @@ export default function ChatView({
             paddingTop: HEADER_HEIGHT,
             paddingBottom: keyboardVisible ? INPUT_BAR_CONTENT_HEIGHT + 8 : INPUT_BAR_HEIGHT,
           },
-        ]} 
+        ]}
       >
         <FlatList
           style={{ flex: 1 }}
-          data={chatLog}
+          data={[...messages]}
           ref={flatListRef}
+          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          onLayout={() => flatListRef.current?.scrollToEnd({ animated: false })}
           renderItem={({ item, index }) => {
             if (item.isSent) {
               return (
-                <View
-                  key={index}
-                  style={{
-                    backgroundColor: '#0078fe',
-                    padding: 10,
-                    marginLeft: '45%',
-                    borderRadius: 20,
-                    marginTop: 5,
-                    marginRight: '5%',
-                    maxWidth: '50%',
-                    alignSelf: 'flex-end',
-                  }}
-                >
-                  <Text style={{ fontSize: 16, color: '#fff' }}>{item.text}</Text>
-                  <View style={styles.rightArrow} />
-                  <View style={styles.rightArrowOverlap} />
+                <View key={index} style={{ alignSelf: 'flex-end', marginTop: 5, marginRight: '5%', maxWidth: '50%' }}>
+                  <View style={{ backgroundColor: '#0078fe', padding: 10, borderRadius: 20 }}>
+                    <Text style={{ fontSize: 16, color: '#fff' }}>{item.text}</Text>
+                    <View style={styles.rightArrow} />
+                    <View style={styles.rightArrowOverlap} />
+                  </View>
+                  <Text style={{ fontSize: 11, color: LucidColors.onSurfaceVariant, marginTop: 4, textAlign: 'right' }}>
+                    {item.timestamp.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+                  </Text>
                 </View>
               );
             } else {
               return (
-                <View
-                  key={index}
-                  style={{
-                    backgroundColor: '#dedede',
-                    padding: 10,
-                    borderRadius: 20,
-                    marginTop: 5,
-                    marginLeft: '5%',
-                    maxWidth: '50%',
-                    alignSelf: 'flex-start',
-                  }}
-                >
-                  <Text style={{ fontSize: 16, color: '#000' }}>{item.text}</Text>
-                  <View style={styles.leftArrow} />
-                  <View style={styles.leftArrowOverlap} />
+                <View key={index} style={{ alignSelf: 'flex-start', marginTop: 5, marginLeft: '5%', maxWidth: '50%' }}>
+                  <View style={{ backgroundColor: '#dedede', padding: 10, borderRadius: 20 }}>
+                    <Text style={{ fontSize: 16, color: '#000' }}>{item.text}</Text>
+                    <View style={styles.leftArrow} />
+                    <View style={styles.leftArrowOverlap} />
+                  </View>
+                  <Text style={{ fontSize: 11, color: LucidColors.onSurfaceVariant, marginTop: 4 }}>
+                    {item.timestamp.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+                  </Text>
                 </View>
               );
             }
           }}
           keyExtractor={(_item, index) => index.toString()}
         />
-      
+
 
         {/* Placeholder empty-state */}
-        {chatLog.length === 0 && (
+        {messages.length === 0 && (
           <View style={styles.emptyMessages}>
             <Text style={styles.emptyText}>No messages yet</Text>
             <Text style={styles.emptySubtext}>Send a message to start the conversation</Text>
@@ -143,7 +136,7 @@ export default function ChatView({
         profilePicture={profilePicture ?? require('../../assets/profile.jpeg')}
         chatPartnerName={chatPartnerName}
         onlineStatus="online"
-        onBack={onBack ?? (() => {})}
+        onBack={onBack ?? (() => { })}
         topInset={insets.top}
       />
 
@@ -184,6 +177,10 @@ export default function ChatView({
               <Ionicons name="send" size={18} color="#fff" />
             </LinearGradient>
           </TouchableOpacity>
+          {/* Nur zum Testen — danach entfernen */}
+          <TouchableOpacity onPress={() => addMessage('Test Antwort', false)}>
+            <Text style={{ color: 'white' }}>← Empfangen</Text>
+          </TouchableOpacity>
         </View>
       </BlurView>
     </KeyboardAvoidingView>
@@ -193,30 +190,30 @@ export default function ChatView({
 const styles = StyleSheet.create({
 
   rightArrow: {
-  position: "absolute",
-  backgroundColor: "#0078fe",
-  //backgroundColor:"red",
-  width: 20,
-  height: 25,
-  bottom: 0,
-  borderBottomLeftRadius: 25,
-  right: -10
-},
+    position: "absolute",
+    backgroundColor: "#0078fe",
+    //backgroundColor:"red",
+    width: 20,
+    height: 25,
+    bottom: 0,
+    borderBottomLeftRadius: 25,
+    right: -10
+  },
 
-rightArrowOverlap: {
-  position: "absolute",
-  backgroundColor: LucidColors.surface,
-  //backgroundColor:"green",
-  width: 20,
-  height: 35,
-  bottom: -6,
-  borderBottomLeftRadius: 18,
-  right: -20
+  rightArrowOverlap: {
+    position: "absolute",
+    backgroundColor: LucidColors.surface,
+    //backgroundColor:"green",
+    width: 20,
+    height: 35,
+    bottom: -6,
+    borderBottomLeftRadius: 18,
+    right: -20
 
-},
+  },
 
-/*Arrow head for recevied messages*/
-leftArrow: {
+  /*Arrow head for recevied messages*/
+  leftArrow: {
     position: "absolute",
     backgroundColor: "#dedede",
     //backgroundColor:"red",
@@ -225,9 +222,9 @@ leftArrow: {
     bottom: 0,
     borderBottomRightRadius: 25,
     left: -10
-},
+  },
 
-leftArrowOverlap: {
+  leftArrowOverlap: {
     position: "absolute",
     backgroundColor: LucidColors.surface,
     //backgroundColor:"green",
@@ -237,7 +234,7 @@ leftArrowOverlap: {
     borderBottomRightRadius: 18,
     left: -20
 
-},
+  },
 
   container: {
     flex: 1,

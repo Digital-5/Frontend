@@ -8,8 +8,6 @@ import {
   TextInput,
   Modal,
   StyleSheet,
-  // ScrollView,  // TODO: Wird wieder benötigt wenn Status-Funktion aktiviert wird
-  ImageSourcePropType,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
@@ -19,73 +17,29 @@ import LucidColors from '../theme/lucidColors';
 import LucidFonts from '../theme/lucidFonts';
 import { Icon } from '../components';
 import AddChatView from './AddChatView';
-
-interface Chat {
-  uuid: number;
-  username: string;
-  name: string;
-  lastMessage: string;
-  timestamp: string;
-  avatar: ImageSourcePropType;
-  unreadCount: number;
-  isOnline: boolean;
-}
-
-// TODO: Status-Funktion — kann später reaktiviert werden
-// interface Story {
-//   id: string;
-//   name: string;
-//   avatar: ImageSourcePropType;
-//   isActive: boolean;
-// }
-
-const MOCK_CHATS: Chat[] = [
-  {
-    uuid: 1,
-    username: 'UNC',
-    name: 'Uncle Liri',
-    lastMessage: 'JONAS IST DER BESTE',
-    timestamp: '10:30',
-    avatar: require('../../assets/profile.jpeg'),
-    unreadCount: 3,
-    isOnline: true,
-  },
-  {
-    uuid: 2,
-    username: 'Erwin',
-    name: 'Coding Goat',
-    lastMessage: 'Liridon du alter Sack',
-    timestamp: '09:15',
-    avatar: require('../../assets/D5_icon.png'),
-    unreadCount: 0,
-    isOnline: false,
-  },
-];
-
-// TODO: Status-Funktion — Beispieldaten für spätere Verwendung
-// const MOCK_STORIES: Story[] = [
-//   { id: '1', name: 'LIRI', avatar: require('../../assets/profile.jpeg'), isActive: true },
-//   { id: '2', name: 'JONAS', avatar: require('../../assets/D5_icon.png'), isActive: true },
-// ];
+import { useConversations } from '../hooks/useConversation';
+import { Conversation } from '../service/RealmDatabase';
 
 const HEADER_CONTENT_HEIGHT = 64;
 const BOTTOM_NAV_CONTENT_HEIGHT = 72;
 
 type ChatOverviewProps = {
-  onChatPress?: (_chat: Chat) => void;
+  onChatPress?: (chatId: string, name: string) => void;
+  onDebugPress?: () => void;
 };
 
-export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
+export default function ChatOverview({ onChatPress, onDebugPress }: ChatOverviewProps) {
+  const { conversations } = useConversations();
+
   const insets = useSafeAreaInsets();
   const HEADER_HEIGHT = insets.top + HEADER_CONTENT_HEIGHT;
   const BOTTOM_NAV_HEIGHT = insets.bottom + BOTTOM_NAV_CONTENT_HEIGHT;
 
-  const [chats] = useState<Chat[]>(MOCK_CHATS);
   const [searchText, setSearchText] = useState('');
   const [showAddChat, setShowAddChat] = useState(false);
 
-  const filteredChats = chats.filter((chat) =>
-    chat.name.toLowerCase().includes(searchText.toLowerCase())
+  const filteredChats = conversations.filter((conv) =>
+    conv.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const sortedChats = [...filteredChats].sort((a, b) => {
@@ -94,9 +48,16 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
     return 0;
   });
 
-  const handleChatPress = (chat: Chat) => {
-    onChatPress?.(chat);
-  };
+  const handleChatPress = (conv: Conversation) => {
+  console.log('=== Conversation ===');
+  console.log('chatId:', conv.chatId);
+  console.log('name:', conv.name);
+  console.log('username:', conv.username);
+  console.log('lastMessage:', conv.lastMessage);
+  console.log('lastMessageAt:', conv.lastMessageAt);
+  console.log('unreadCount:', conv.unreadCount);
+  onChatPress?.(conv.chatId, conv.name);
+};
 
   const renderListHeader = () => (
     <View style={styles.listHeader}>
@@ -146,21 +107,15 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
     </View>
   );
 
-  const renderChatItem = ({ item }: { item: Chat }) => (
+  const renderChatItem = ({ item }: { item: Conversation }) => (
     <TouchableOpacity
       style={[styles.chatItem, item.unreadCount > 0 && styles.chatItemUnread]}
       onPress={() => handleChatPress(item)}
       activeOpacity={0.7}
     >
-      {/* Avatar with optional online halo */}
+      {/* Avatar */}
       <View style={styles.avatarContainer}>
-        {item.isOnline ? (
-          <View style={styles.onlineHalo}>
-            <Image source={item.avatar} style={styles.avatar} />
-          </View>
-        ) : (
-          <Image source={item.avatar} style={styles.avatarNoHalo} />
-        )}
+        <Image source={require('../../assets/D5_icon.png')} style={styles.avatarNoHalo} />
       </View>
 
       {/* Chat info */}
@@ -173,7 +128,7 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
               item.unreadCount > 0 && styles.timestampUnread,
             ]}
           >
-            {item.timestamp}
+            {item.lastMessageAt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
           </Text>
         </View>
         <View style={styles.chatPreview}>
@@ -210,7 +165,7 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
       <FlatList
         data={sortedChats}
         renderItem={renderChatItem}
-        keyExtractor={(item) => String(item.uuid)}
+        keyExtractor={(item) => item.chatId}
         ListHeaderComponent={renderListHeader}
         ListEmptyComponent={renderEmptyList}
         contentContainerStyle={{
@@ -248,7 +203,7 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
             <TouchableOpacity style={styles.headerIconBtn} activeOpacity={0.7}>
               <Ionicons name="search" size={22} color={LucidColors.onSurfaceVariant} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.headerIconBtn} activeOpacity={0.7}>
+            <TouchableOpacity style={styles.headerIconBtn} activeOpacity={0.7} onPress={onDebugPress}>
               <Ionicons name="ellipsis-vertical" size={22} color={LucidColors.onSurfaceVariant} />
             </TouchableOpacity>
           </View>
@@ -319,7 +274,13 @@ export default function ChatOverview({ onChatPress }: ChatOverviewProps) {
         presentationStyle="pageSheet"
         onRequestClose={() => setShowAddChat(false)}
       >
-        <AddChatView onClose={() => setShowAddChat(false)} />
+        <AddChatView
+          onClose={() => setShowAddChat(false)}
+          onChatCreated={(chatId, name) => {
+            setShowAddChat(false);
+            onChatPress?.(chatId, name);
+          }}
+        />
       </Modal>
     </View>
   );
@@ -418,11 +379,6 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     flexShrink: 0,
-  },
-  onlineHalo: {
-    padding: 2,
-    borderRadius: 9999,
-    backgroundColor: LucidColors.tertiary,
   },
   avatar: {
     width: 52,
