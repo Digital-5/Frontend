@@ -115,7 +115,7 @@ export default function ChatOverview({ onChatPress, onDebugPress }: ChatOverview
     >
       {/* Avatar */}
       <View style={styles.avatarContainer}>
-        <Image source={require('../../assets/D5_icon.png')} style={styles.avatarNoHalo} />
+        <Image source={require('../../assets/standard_profile_icon.png')} style={styles.avatarNoHalo} />
       </View>
 
       {/* Chat info */}
@@ -192,7 +192,7 @@ export default function ChatOverview({ onChatPress, onDebugPress }: ChatOverview
           <View style={styles.headerLeft}>
             <View style={styles.headerAvatarWrapper}>
               <Image
-                source={require('../../assets/profile.jpeg')}
+                source={require('../../assets/standard_profile_icon.png')}
                 style={styles.headerAvatar}
               />
               <View style={styles.headerAvatarOnline} />

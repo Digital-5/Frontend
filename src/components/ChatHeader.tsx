@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
   onlineHalo: {
     padding: 2,
     borderRadius: 9999,
-    backgroundColor: LucidColors.tertiary,
     flexShrink: 0,
   },
   avatar: {
@@ -119,13 +118,14 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 18,
     borderWidth: 2,
-    borderColor: LucidColors.surfaceDim,
+    borderColor: LucidColors.tertiary,
   },
   avatarOffline: {
     width: 40,
     height: 40,
     borderRadius: 20,
     flexShrink: 0,
+  
   },
   chatInfo: {
     flex: 1,

@@ -47,17 +47,21 @@ export default function ChatView({
 
   const [message, setMessage] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { messages, addMessage } = useMessages(chatId);
   const flatListRef = useRef<FlatList>(null);  // ← diese Zeile ergänzen
 
 
   useEffect(() => {
-    const show = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
-    const hide = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
-    return () => {
-      show.remove();
-      hide.remove();
-    };
+    const show = Keyboard.addListener('keyboardWillShow', (e) => {
+      setKeyboardVisible(true);
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const hide = Keyboard.addListener('keyboardWillHide', () => {
+      setKeyboardVisible(false);
+      setKeyboardHeight(0);
+    });
+    return () => { show.remove(); hide.remove(); };
   }, []);
 
   const handleSend = () => {
@@ -70,7 +74,7 @@ export default function ChatView({
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={undefined}
       keyboardVerticalOffset={0}
     >
       {/* Messages area — padded so content isn't hidden under overlays */}
@@ -133,7 +137,7 @@ export default function ChatView({
 
       {/* ── Glass Chat Header ──────────────────────────────────────────────── */}
       <ChatHeader
-        profilePicture={profilePicture ?? require('../../assets/profile.jpeg')}
+        profilePicture={profilePicture ?? require('../../assets/standard_profile_icon.png')}
         chatPartnerName={chatPartnerName}
         onlineStatus="online"
         onBack={onBack ?? (() => { })}
@@ -147,9 +151,8 @@ export default function ChatView({
         style={[
           styles.inputBar,
           {
-            height: INPUT_BAR_HEIGHT,
+            bottom: keyboardHeight,
             paddingBottom: keyboardVisible ? 8 : insets.bottom + 8,
-            backgroundColor: 'rgba(37, 34, 63, 0.65)',
           },
         ]}
       >
