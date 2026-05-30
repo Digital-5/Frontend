@@ -46,22 +46,19 @@ export default function ChatView({
   const INPUT_BAR_HEIGHT = insets.bottom + INPUT_BAR_CONTENT_HEIGHT;
 
   const [message, setMessage] = useState('');
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { messages, addMessage } = useMessages(chatId);
-  const flatListRef = useRef<FlatList>(null);  // ← diese Zeile ergänzen
+  const flatListRef = useRef<FlatList>(null);
+  const prevMessageCount = useRef(0);
 
 
   useEffect(() => {
+
     const show = Keyboard.addListener('keyboardWillShow', (e) => {
-      setKeyboardVisible(true);
-      setKeyboardHeight(e.endCoordinates.height);
+    setTimeout(() => {
+      flatListRef.current?.scrollToOffset({ offset: 999999, animated: false });
+    }, e.duration ?? 300);
     });
-    const hide = Keyboard.addListener('keyboardWillHide', () => {
-      setKeyboardVisible(false);
-      setKeyboardHeight(0);
-    });
-    return () => { show.remove(); hide.remove(); };
+    return () => show.remove();
   }, []);
 
   const handleSend = () => {
@@ -74,25 +71,30 @@ export default function ChatView({
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={undefined}
-      keyboardVerticalOffset={0}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      {/* Messages area — padded so content isn't hidden under overlays */}
-      <View
-        style={[
-          styles.messagesArea,
-          {
-            paddingTop: HEADER_HEIGHT,
-            paddingBottom: keyboardVisible ? INPUT_BAR_CONTENT_HEIGHT + 8 : INPUT_BAR_HEIGHT,
-          },
-        ]}
-      >
+      {/* Header bleibt absolute (Glaseffekt) */}
+      <ChatHeader
+        profilePicture={profilePicture ?? require('../../assets/standard_profile_icon.png')}
+        chatPartnerName={chatPartnerName}
+        onlineStatus="online"
+        onBack={onBack ?? (() => { })}
+        topInset={insets.top}
+      />
+
+      {/* Messages — füllt den verfügbaren Platz */}
+      <View style={{ flex: 1, paddingTop: HEADER_HEIGHT, paddingHorizontal: 16 }}>
         <FlatList
           style={{ flex: 1 }}
-          data={[...messages]}
+          contentContainerStyle={{ paddingBottom: 8 }}
           ref={flatListRef}
-          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          onContentSizeChange={() => {
+            const isNewMessage = messages.length === prevMessageCount.current + 1;
+            flatListRef.current?.scrollToEnd({ animated: isNewMessage });
+            prevMessageCount.current = messages.length;
+          }}
           onLayout={() => flatListRef.current?.scrollToEnd({ animated: false })}
+          data={[...messages]}
           renderItem={({ item, index }) => {
             if (item.isSent) {
               return (
@@ -135,26 +137,11 @@ export default function ChatView({
         )}
       </View>
 
-      {/* ── Glass Chat Header ──────────────────────────────────────────────── */}
-      <ChatHeader
-        profilePicture={profilePicture ?? require('../../assets/standard_profile_icon.png')}
-        chatPartnerName={chatPartnerName}
-        onlineStatus="online"
-        onBack={onBack ?? (() => { })}
-        topInset={insets.top}
-      />
-
       {/* ── Glass Input Bar ───────────────────────────────────────────────── */}
       <BlurView
         intensity={50}
         tint="dark"
-        style={[
-          styles.inputBar,
-          {
-            bottom: keyboardHeight,
-            paddingBottom: keyboardVisible ? 8 : insets.bottom + 8,
-          },
-        ]}
+        style={[styles.inputBar, { paddingBottom: insets.bottom }]}
       >
         <View style={styles.inputBarInner}>
           <TextInput
@@ -265,11 +252,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
+
     justifyContent: 'flex-end',
   },
   inputBarInner: {
