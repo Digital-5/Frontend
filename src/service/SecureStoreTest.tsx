@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TextInput, Button } from 'react-native';
 import * as StoreKeys from './StoreKeys';
 import { generateKeys } from './Keys';
 import { requestUserPermission } from './Notifications';
+import { postRequest } from './api/request'
 
 export default function StoreKey() {
   const [keyName, setKeyName] = useState('');
@@ -73,6 +74,44 @@ export default function StoreKey() {
             } catch (error) {
               console.error('❌ Fehler bei Benachrichtigung:', error);
               alert('Fehler: ' + error);
+            }
+          }}
+        />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.label}>Server Request:</Text>
+        <Button
+          title="Server Request"
+          onPress={async () => {
+            try {
+              type RegisterBody = {
+                username: string;
+                identityKey: string;
+                preKey: string;
+                preKeySignature: string;
+                kemKey: string;
+                keyKemSignature: string;
+              };
+              type MyResponse = { success: boolean; message: string };
+
+              const body: RegisterBody = {
+                username: 'testuser',
+                identityKey: 'identityKeyValue',
+                preKey: 'preKeyValue',
+                preKeySignature: 'preKeySignatureValue',
+                kemKey: 'kemKeyValue',
+                keyKemSignature: 'keyKemSignatureValue',
+              };
+
+              const result = await postRequest<RegisterBody, MyResponse>('/account/register', body);
+              console.log('✅ Result:', result);
+            } catch (error: any) {
+              console.error('❌ error.message:', error?.message);
+              console.error('❌ error.code:', error?.code);
+              console.error('❌ error.response?.status:', error?.response?.status);
+              console.error('❌ error.response?.data:', JSON.stringify(error?.response?.data));
+              alert('Fehler: ' + error?.message);
             }
           }}
         />

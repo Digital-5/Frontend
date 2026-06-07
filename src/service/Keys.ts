@@ -3,18 +3,26 @@ import uuid from 'react-native-uuid'
 import {generateX25519Keys, generateKyberKeyPair, signKey} from '../../../SignalProtocolReactLib/src/pqxdh/interfaces/CryptoInterface';
 
 
+export type GeneratedKeys = {
+    identityKey: string;
+    preKey: string;
+    preKeySignature: string;
+    kemKey: string;
+    keyKemSignature: string;
+};
+
 // generate all necessary keys, sign the keys and store them securely
-export async function generateKeys() {
+export async function generateKeys(): Promise<GeneratedKeys> { 
     const ourIdentityKeyPair = await generateX25519Keys(); //save privatekey name:IdentityPrivate
     StoreKeys.saveValue('IdentityPrivate', ourIdentityKeyPair.privateKey)
 
-    const ourEphemeralKeyPair = await generateX25519Keys(); //save private key name: EphemeralPrivate (overwrite periodically)
-    StoreKeys.saveValue('EphemeralPrivate', ourEphemeralKeyPair.privateKey)
+    const ourPreKeyPair = await generateX25519Keys(); //save private key name: EphemeralPrivate (overwrite periodically)
+    StoreKeys.saveValue('PreKeyPrivate', ourPreKeyPair.privateKey)
 
     //EphemeralPublicKey signieren
     
-    const EphemeralPublicSignature = await signKey(ourIdentityKeyPair.privateKey, ourEphemeralKeyPair.publicKey);
-    console.log('signed: ',EphemeralPublicSignature)
+    const PreKeyPublicSignature = await signKey(ourIdentityKeyPair.privateKey, ourPreKeyPair.publicKey);
+    console.log('signed: ',PreKeyPublicSignature)
 
     //Generate LastResortPQKEM KeyPair and signature
 
@@ -33,13 +41,20 @@ export async function generateKeys() {
     //store both private keys in one entry
 
     const oneTimeKeypair = oneTimePQKEMKeyPair.privateKey + ':' + oneTimeX25519KeyPair.privateKey
-    StoreKeys.saveValue(generatedUUID, oneTimeKeypair)
-    console.log('Stored Key: ', generatedUUID, 'with Value:', oneTimeKeypair)
+    StoreKeys.saveValue('oneTimeKeypair', oneTimeKeypair)
+    console.log('Stored Key: ', 'onetimeKeypair', 'with Value:', oneTimeKeypair)
 
     //OneTime Key signed, overwrite priodically
     const oneTimePQKEMSignature = await signKey(ourIdentityKeyPair.privateKey, oneTimePQKEMKeyPair.publicKey);
     console.log("signed",oneTimePQKEMSignature)
 
+    return {
+        identityKey: ourIdentityKeyPair.publicKey,
+        preKey: ourPreKeyPair.publicKey,
+        preKeySignature: PreKeyPublicSignature,
+        kemKey: PQKEMKeyPair.publicKey,
+        keyKemSignature: PQKEMSignature,
+    };
 }
 
 

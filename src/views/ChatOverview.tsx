@@ -200,9 +200,9 @@ export default function ChatOverview({ onChatPress, onDebugPress }: ChatOverview
             <Text style={styles.headerTitle}>Chats</Text>
           </View>
           <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.headerIconBtn} activeOpacity={0.7}>
+            {/* <TouchableOpacity style={styles.headerIconBtn} activeOpacity={0.7}>
               <Ionicons name="search" size={22} color={LucidColors.onSurfaceVariant} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={styles.headerIconBtn} activeOpacity={0.7} onPress={onDebugPress}>
               <Ionicons name="ellipsis-vertical" size={22} color={LucidColors.onSurfaceVariant} />
             </TouchableOpacity>

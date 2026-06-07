@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { generateKeys } from '../service/Keys';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,8 +14,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Modal } from '../components';
+import { postRequest } from '../service/api/request';
 import LucidColors from '../theme/lucidColors';
 import LucidFonts from '../theme/lucidFonts';
+
 
 type SignupViewProps = {
   onSubmit?: (_credentials: { username: string }) => void;
@@ -26,9 +29,42 @@ export default function SignupView({ onSubmit }: SignupViewProps) {
   const [getHelpBtn, setGetHelpBtn] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     console.log('Signup attempt with:', { username });
-    onSubmit?.({ username });
+
+    try {
+      type RegisterBody = {
+        username: string;
+        identityKey: string;
+        preKey: string;
+        preKeySignature: string;
+        kemKey: string;
+        keyKemSignature: string;
+      };
+      type RegisterResponse = { success: boolean; message: string };
+
+      const keys = await generateKeys();
+      console.log('✅ Alle Keys erfolgreich generiert!');
+
+      const body: RegisterBody = {
+        username,
+        identityKey: keys.identityKey,
+        preKey: keys.preKey,
+        preKeySignature: keys.preKeySignature,
+        kemKey: keys.kemKey,
+        keyKemSignature: keys.keyKemSignature,
+      };
+
+      const result = await postRequest<RegisterBody, RegisterResponse>('/account/register', body);
+      console.log('✅ Result:', result);
+      onSubmit?.({ username });
+    } catch (error: any) {
+      console.error('❌ error.message:', error?.message);
+      console.error('❌ error.code:', error?.code);
+      console.error('❌ error.response?.status:', error?.response?.status);
+      console.error('❌ error.response?.data:', JSON.stringify(error?.response?.data));
+      alert('Fehler: ' + error?.message);
+    }
   };
 
   return (
