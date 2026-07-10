@@ -13,16 +13,13 @@ export async function generateKeys() {
 
     //EphemeralPublicKey signieren
     
-    const EphemeralPublicSignature = await signKey(ourIdentityKeyPair.privateKey, ourEphemeralKeyPair.publicKey);
-    console.log('signed: ',EphemeralPublicSignature)
+    const _EphemeralPublicSignature = await signKey(ourIdentityKeyPair.privateKey, ourEphemeralKeyPair.publicKey);
 
     //Generate LastResortPQKEM KeyPair and signature
 
     const PQKEMKeyPair = await generateKyberKeyPair(); //save privatekey name: PQKEMLastResortPrivate (overwrite periodically)
     StoreKeys.saveValue('PQKEMLastResortPrivate', PQKEMKeyPair.privateKey)
-    console.log('Stored Key: PQKEMLastResortPrivate with Value:', PQKEMKeyPair.privateKey)
-    const PQKEMSignature = await signKey(ourIdentityKeyPair.privateKey, PQKEMKeyPair.publicKey);
-    console.log("signed",PQKEMSignature)
+    const _PQKEMSignature = await signKey(ourIdentityKeyPair.privateKey, PQKEMKeyPair.publicKey);
     
     //Generate One-Time Keys    
 
@@ -34,11 +31,9 @@ export async function generateKeys() {
 
     const oneTimeKeypair = oneTimePQKEMKeyPair.privateKey + ':' + oneTimeX25519KeyPair.privateKey
     StoreKeys.saveValue(generatedUUID, oneTimeKeypair)
-    console.log('Stored Key: ', generatedUUID, 'with Value:', oneTimeKeypair)
 
     //OneTime Key signed, overwrite priodically
-    const oneTimePQKEMSignature = await signKey(ourIdentityKeyPair.privateKey, oneTimePQKEMKeyPair.publicKey);
-    console.log("signed",oneTimePQKEMSignature)
+    const _oneTimePQKEMSignature = await signKey(ourIdentityKeyPair.privateKey, oneTimePQKEMKeyPair.publicKey);
 
 }
 

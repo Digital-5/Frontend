@@ -1,10 +1,9 @@
-import { useState } from 'react';
+// TODO: Replace with cryptographic auth flow - no passwords in this app
 import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,15 +18,12 @@ type LoginViewProps = {
 
 export default function LoginView({ onSubmit }: LoginViewProps) {
   const insets = useSafeAreaInsets();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    console.log('Login attempt with:', { email, password });
-    onSubmit?.({ email, password });
+    onSubmit?.({ email: '', password: '' });
   };
-
-  const canSubmit = email.trim().length > 0 && password.length > 0;
 
   return (
     <KeyboardAvoidingView
@@ -43,7 +39,7 @@ export default function LoginView({ onSubmit }: LoginViewProps) {
 
         {/* Inputs */}
         <View style={styles.inputGroup}>
-          <TextInput
+          {/* <TextInput
             style={styles.input}
             placeholder="Email"
             value={email}
@@ -59,17 +55,13 @@ export default function LoginView({ onSubmit }: LoginViewProps) {
             onChangeText={setPassword}
             secureTextEntry
             placeholderTextColor={LucidColors.onSurfaceVariant}
-          />
+          /> */}
         </View>
 
         {/* Primary button */}
-        <TouchableOpacity onPress={handleLogin} activeOpacity={0.85} disabled={!canSubmit}>
+        <TouchableOpacity onPress={handleLogin} activeOpacity={0.85}>
           <LinearGradient
-            colors={
-              canSubmit
-                ? [LucidColors.primary, LucidColors.primaryDim]
-                : [LucidColors.surfaceContainerHigh, LucidColors.surfaceContainerHigh]
-            }
+            colors={[LucidColors.primary, LucidColors.primaryDim]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.button}
@@ -78,10 +70,9 @@ export default function LoginView({ onSubmit }: LoginViewProps) {
           </LinearGradient>
         </TouchableOpacity>
 
-        {/* Forgot password */}
-        <TouchableOpacity style={styles.forgotPassword} activeOpacity={0.7}>
+        {/* <TouchableOpacity style={styles.forgotPassword} activeOpacity={0.7}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </KeyboardAvoidingView>
   );
