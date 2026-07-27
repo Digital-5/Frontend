@@ -21,7 +21,7 @@ const MENU_ITEMS: MenuItem[] = [
   { id: 'signup', label: 'Signup View' },
   { id: 'modal', label: 'Modal View' },
   { id: 'chatview', label: 'Chat View' },
-  { id: 'storeKey', label: 'Store Key' },
+  ...(__DEV__ ? [{ id: 'storeKey' as ViewName, label: 'Store Key' }] : []),
 ];
 
 export default function DebugViewSelector() {

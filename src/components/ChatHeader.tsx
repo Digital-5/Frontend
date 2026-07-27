@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Platform, ImageSourcePropType, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageSourcePropType, Image } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import LucidColors from '../theme/lucidColors';
